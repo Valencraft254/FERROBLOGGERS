@@ -23,7 +23,7 @@ header{
   background-size:300% 300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation: galaxyShift 5s linear infinite;
+  animation:galaxyShift 5s linear infinite;
 }
 @keyframes galaxyShift{
   0%{background-position:0% 50%;}
@@ -69,6 +69,16 @@ button{
   font-size:13px;
   opacity:.7;
 }
+.station-panel{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.station-btn{
+  padding:8px 12px;
+  font-size:13px;
+}
 </style>
 </head>
 <body>
@@ -89,62 +99,38 @@ button{
 <div id="horarios" class="grid"></div>
 
 <script>
-let lineaActual = null
-let ramalActual = null
+let lineaActual = "Mitre"
+let ramalActual = "Tigre"
 
 const datos = {
   "Mitre": {
     "Tigre": [
-      "Retiro",
-      "3 de Febrero",
-      "Belgrano C",
-      "Belgrano R",
-      "Drago",
-      "Núñez",
-      "Olivos",
-      "San Isidro",
-      "Tigre"
+      "Retiro","3 de Febrero","Belgrano C","Belgrano R",
+      "Drago","Núñez","Olivos","San Isidro","Tigre"
     ],
     "Suárez": [
-      "Retiro",
-      "Belgrano R",
-      "Coghlan",
-      "Saavedra",
-      "Miguelete",
-      "San Martín",
-      "José León Suárez"
+      "Retiro","Belgrano R","Coghlan",
+      "Saavedra","Miguelete","San Martín","José León Suárez"
     ],
-    "Mitre": [
-      "Retiro",
-      "Belgrano C",
-      "Vicente López",
-      "Florida",
-      "Bartolomé Mitre"
+    "Bart. Mitre": [
+      "Retiro","Belgrano C","Vicente López",
+      "Florida","Bartolomé Mitre"
     ]
   },
   "Roca": {
     "Principal": [
-      "Constitución",
-      "Avellaneda",
-      "Lanús",
-      "Lomas",
-      "Temperley",
-      "La Plata"
+      "Constitución","Avellaneda","Lanús",
+      "Lomas","Temperley","La Plata"
     ]
   },
   "Sarmiento": {
     "Principal": [
-      "Once",
-      "Caballito",
-      "Flores",
-      "Liniers",
-      "Morón",
-      "Castelar",
-      "Moreno"
+      "Once","Caballito","Flores",
+      "Liniers","Morón","Castelar","Moreno"
     ]
   },
   "San Martín": {
-    "San Martín": [
+    "Principal": [
       "San Martín"
     ]
   }
@@ -153,23 +139,19 @@ const datos = {
 function generarHorariosOrdenados(cantidad){
   const ahora = new Date()
   const horarios = []
-
   let hora = ahora.getHours()
   let minuto = ahora.getMinutes()
 
-  for(let i = 0; i < cantidad; i++){
+  for(let i=0;i<cantidad;i++){
     minuto += 7
-
     while(minuto >= 60){
       minuto -= 60
-      hora += 1
+      hora++
     }
-
     horarios.push(
       `${hora.toString().padStart(2,'0')}:${minuto.toString().padStart(2,'0')}`
     )
   }
-
   return horarios
 }
 
@@ -178,11 +160,19 @@ function cargarLinea(linea){
   const subMenu = document.getElementById("subMenu")
   subMenu.innerHTML = ""
 
-  Object.keys(datos[linea]).forEach(ramal=>{
-    subMenu.innerHTML += `
-      <button onclick="cargarRamal('${ramal}')">${ramal}</button>
+  if(linea === "Mitre"){
+    subMenu.innerHTML = `
+      <button onclick="cargarRamal('Tigre')">Tigre</button>
+      <button onclick="cargarRamal('Suárez')">Suárez</button>
+      <button onclick="cargarRamal('Bart. Mitre')">Bart. Mitre</button>
     `
-  })
+  } else {
+    Object.keys(datos[linea]).forEach(ramal=>{
+      subMenu.innerHTML += `
+        <button onclick="cargarRamal('${ramal}')">${ramal}</button>
+      `
+    })
+  }
 
   ramalActual = Object.keys(datos[linea])[0]
   render()
@@ -193,12 +183,42 @@ function cargarRamal(ramal){
   render()
 }
 
+function mostrarEstacion(estacion,hora){
+  const box = document.getElementById("horarios")
+  box.innerHTML = `
+    <div class="card" style="grid-column:1/-1">
+      <h3>🎯 Estación seleccionada</h3>
+      <p>📍 ${estacion}</p>
+      <h2>${hora}</h2>
+      <button onclick="render()">⬅ Volver</button>
+    </div>
+  `
+}
+
 function render(){
   const box = document.getElementById("horarios")
   box.innerHTML = ""
 
   const estaciones = datos[lineaActual][ramalActual]
   const horarios = generarHorariosOrdenados(estaciones.length)
+
+  box.innerHTML += `
+    <div class="card" style="grid-column:1/-1">
+      <h3>🎛️ Elegir estación</h3>
+      <div class="station-panel" id="panelEstaciones"></div>
+    </div>
+  `
+
+  const panel = document.getElementById("panelEstaciones")
+
+  estaciones.forEach((estacion,index)=>{
+    panel.innerHTML += `
+      <button class="station-btn"
+        onclick="mostrarEstacion('${estacion}','${horarios[index]}')">
+        ${estacion}
+      </button>
+    `
+  })
 
   estaciones.forEach((estacion,index)=>{
     box.innerHTML += `
@@ -213,7 +233,7 @@ function render(){
 
   if(
     lineaActual === "Mitre" &&
-    (ramalActual === "Mitre" || ramalActual === "Suárez")
+    (ramalActual === "Suárez" || ramalActual === "Bart. Mitre")
   ){
     box.innerHTML += `
       <div class="card">
@@ -226,7 +246,7 @@ function render(){
       </div>
 
       <div class="card">
-        <h3>🚄 Larga Distancia Rosario</h3>
+        <h3>🚄 Rosario</h3>
         <p>Retiro: 19:40</p>
         <p>Drago: 20:15 - 20:40</p>
       </div>
