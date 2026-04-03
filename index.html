@@ -134,27 +134,37 @@ input::placeholder{
   <input id="search" placeholder="Ferrobloggers">
 </div>
 
-<div class="grid" id="cards">
+<div class="grid">
 
   <div class="card">
     <div class="linea">NCA • Luis María Drago</div>
     <div class="status red">APROXIMADO</div>
     <div class="big" id="nca1">Calculando...</div>
-    <div class="small">Pasa entre 23:50 y 00:56 • sábados y domingos</div>
+    <div class="small">
+      Sábados y domingos<br>
+      Entre 23:50 y 00:56
+    </div>
   </div>
 
   <div class="card">
-    <div class="linea">NCA Madrugada • Drago</div>
+    <div class="linea">NCA • Madrugada</div>
     <div class="status red">APROXIMADO</div>
     <div class="big" id="nca2">Calculando...</div>
-    <div class="small">Pasa entre 02:30 y 03:50 • sábados y domingos</div>
+    <div class="small">
+      Sábados y domingos<br>
+      Entre 02:30 y 03:50
+    </div>
   </div>
 
   <div class="card">
     <div class="linea">Larga Distancia • Rosario Norte</div>
     <div class="status green">EN HORARIO</div>
     <div class="big" id="rosario">Calculando...</div>
-    <div class="small">Retiro → Luis María Drago • 19:50 a 20:30</div>
+    <div class="small">
+      Todos los días<br>
+      Retiro → Luis María Drago<br>
+      Entre 19:50 y 20:30
+    </div>
   </div>
 
 </div>
@@ -162,33 +172,21 @@ input::placeholder{
 <script>
 function nextWeekendTime(hour, minute){
   const now = new Date();
-  let target = new Date(now);
 
-  function setToNext(dayIndex){
-    let diff = (dayIndex - now.getDay() + 7) % 7;
-    target = new Date(now);
-    target.setDate(now.getDate() + diff);
-    target.setHours(hour, minute, 0, 0);
+  let saturday = new Date(now);
+  let diffSat = (6 - now.getDay() + 7) % 7;
+  saturday.setDate(now.getDate() + diffSat);
+  saturday.setHours(hour, minute, 0, 0);
 
-    if(target <= now){
-      target.setDate(target.getDate() + 7);
-    }
-  }
+  let sunday = new Date(now);
+  let diffSun = (7 - now.getDay()) % 7;
+  sunday.setDate(now.getDate() + diffSun);
+  sunday.setHours(hour, minute, 0, 0);
 
-  if(now.getDay() === 6 || now.getDay() === 0){
-    target.setHours(hour, minute, 0, 0);
-    if(target <= now){
-      if(now.getDay() === 6){
-        setToNext(0);
-      } else {
-        setToNext(6);
-      }
-    }
-  } else {
-    setToNext(6);
-  }
+  if(saturday <= now) saturday.setDate(saturday.getDate() + 7);
+  if(sunday <= now) sunday.setDate(sunday.getDate() + 7);
 
-  return target;
+  return saturday < sunday ? saturday : sunday;
 }
 
 function nextDailyTime(hour, minute){
@@ -235,6 +233,7 @@ updateTimes();
 
 document.getElementById("search").addEventListener("input", function(){
   const text = this.value.toLowerCase();
+
   document.querySelectorAll(".card").forEach(card=>{
     card.style.display = card.innerText.toLowerCase().includes(text)
       ? "block"
