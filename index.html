@@ -62,15 +62,15 @@ function generarHorarios(cantidad){
   })
 }
 
-// Cargar línea: solo muestra ramales, nada de horarios
+// Cargar línea: solo muestra ramales
 function cargarLinea(linea){
   lineaActual = linea
-  ramalActual = "" // no hay ramal seleccionado
+  ramalActual = ""
   renderSubmenu()
-  document.getElementById("horarios").innerHTML = "" // limpia cualquier horario anterior
+  document.getElementById("horarios").innerHTML = "" // limpia cualquier contenido anterior
 }
 
-// Cargar ramal: muestra panel de estaciones
+// Cargar ramal: solo muestra estaciones
 function cargarRamal(ramal){
   ramalActual = ramal
   renderEstaciones()
@@ -79,23 +79,36 @@ function cargarRamal(ramal){
 // Renderizar submenu de ramales
 function renderSubmenu(){
   const sub = document.getElementById("subMenu")
-  let botones = ""
+  sub.innerHTML = ""
   Object.keys(datos[lineaActual]).forEach(ramal=>{
-    botones += `<button onclick="cargarRamal('${ramal}')">${ramal}</button>`
+    const btn = document.createElement("button")
+    btn.textContent = ramal
+    btn.onclick = ()=>cargarRamal(ramal)
+    sub.appendChild(btn)
   })
-  sub.innerHTML = botones
 }
 
 // Renderizar panel de estaciones
 function renderEstaciones(){
   const estaciones = datos[lineaActual][ramalActual]
   const box = document.getElementById("horarios")
-  let html = `<div class="card" style="grid-column:1/-1"><h3>🎛️ Elegir estación</h3><div class="station-panel">`
+  box.innerHTML = ""
+  const card = document.createElement("div")
+  card.className = "card"
+  card.style.gridColumn = "1/-1"
+  const h3 = document.createElement("h3")
+  h3.textContent = "🎛️ Elegir estación"
+  const panel = document.createElement("div")
+  panel.className = "station-panel"
   estaciones.forEach(estacion=>{
-    html += `<button onclick="mostrarEstacion('${estacion}')">${estacion}</button>`
+    const btn = document.createElement("button")
+    btn.textContent = estacion
+    btn.onclick = ()=>mostrarEstacion(estacion)
+    panel.appendChild(btn)
   })
-  html += `</div></div>`
-  box.innerHTML = html
+  card.appendChild(h3)
+  card.appendChild(panel)
+  box.appendChild(card)
 }
 
 // Mostrar horarios de estación seleccionada
@@ -103,7 +116,8 @@ function mostrarEstacion(estacion){
   const estaciones = datos[lineaActual][ramalActual]
   const horarios = generarHorarios(estaciones.length)
   const i = estaciones.indexOf(estacion)
-  document.getElementById("horarios").innerHTML = `
+  const box = document.getElementById("horarios")
+  box.innerHTML = `
     <div class="card">
       <h3>🚆 ${lineaActual}</h3>
       <p><b>Ramal:</b> ${ramalActual}</p>
@@ -114,8 +128,8 @@ function mostrarEstacion(estacion){
   `
 }
 
-// ✅ NUNCA llamamos a cargarLinea() al inicio
-// Página inicia totalmente limpia: solo botones de líneas
+// ❌ NUNCA llamamos a cargarLinea() al inicio
+// La página inicia completamente limpia
 </script>
 
 </body>
