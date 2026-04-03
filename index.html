@@ -31,7 +31,10 @@ button{
   box-shadow:0 2px 8px rgba(0,0,0,.1);
   cursor:pointer;
 }
-.section{
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
   padding:20px;
 }
 .card{
@@ -39,17 +42,10 @@ button{
   border-radius:18px;
   padding:20px;
   box-shadow:0 4px 14px rgba(0,0,0,.1);
-  margin-top:20px;
 }
 .red{
   color:red;
   font-weight:bold;
-}
-iframe{
-  width:100%;
-  height:500px;
-  border:none;
-  border-radius:12px;
 }
 </style>
 </head>
@@ -57,44 +53,58 @@ iframe{
 
 <header>
   <h1>🚆 Trenes Argentinos</h1>
-  <p>Horarios en vivo • NCA • Rosario</p>
+  <p>Horarios en vivo • estilo app</p>
 </header>
 
 <div class="menu">
-  <button onclick="cargarLinea('Mitre')">🚆 Mitre</button>
-  <button onclick="cargarLinea('Roca')">🚆 Roca</button>
-  <button onclick="cargarLinea('Sarmiento')">🚆 Sarmiento</button>
-  <button onclick="cargarLinea('San Martín')">🚆 San Martín</button>
+  <button onclick="cargarHorarios('Mitre')">🚆 Mitre</button>
+  <button onclick="cargarHorarios('Roca')">🚆 Roca</button>
+  <button onclick="cargarHorarios('Sarmiento')">🚆 Sarmiento</button>
+  <button onclick="cargarHorarios('San Martín')">🚆 San Martín</button>
 </div>
 
-<div class="section">
-  <div id="resultado" class="card">
-    Elegí una línea para ver horarios en vivo
-  </div>
+<div id="horarios" class="grid"></div>
 
+<div class="grid">
   <div class="card">
     <h3>🚂 NCA</h3>
-    <p>23:00 - 23:20</p>
-    <p>02:30 - 02:45</p>
+    <p>Sale: 23:00 - 23:20</p>
+    <p>Llega Drago: 23:50 - 00:51</p>
+    <p>Sale: 02:30 - 02:45</p>
+    <p>Llega Drago: 03:00 - 03:50</p>
     <p class="red">APROXIMADO</p>
   </div>
 
   <div class="card">
     <h3>🚄 Rosario</h3>
-    <p>Sale: 19:40</p>
+    <p>Sale Retiro: 19:40</p>
     <p>Llega Drago: 20:15 - 20:40</p>
   </div>
 </div>
 
 <script>
-function cargarLinea(linea){
-  const box = document.getElementById("resultado")
+function cargarHorarios(linea){
+  const horarios = document.getElementById("horarios")
 
-  box.innerHTML = `
-    <h3>🚆 Línea ${linea}</h3>
-    <p>Horarios en vivo</p>
-    <iframe src="https://quetren.com/"></iframe>
-  `
+  // acá después conectamos API real
+  const ejemplo = [
+    {estacion:"Retiro",hora:"19:40",estado:"En 5 min"},
+    {estacion:"Belgrano R",hora:"19:52",estado:"En 17 min"},
+    {estacion:"Drago",hora:"20:05",estado:"En 30 min"}
+  ]
+
+  horarios.innerHTML = ""
+
+  ejemplo.forEach(t => {
+    horarios.innerHTML += `
+      <div class="card">
+        <h3>🚆 Línea ${linea}</h3>
+        <p>📍 ${t.estacion}</p>
+        <h2>${t.hora}</h2>
+        <p>${t.estado}</p>
+      </div>
+    `
+  })
 }
 </script>
 
