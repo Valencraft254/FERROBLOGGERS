@@ -1,34 +1,16 @@
-Trenes Argentinos | Horarios en Vivo *{box-sizing:border-box;font-family:Arial,sans-serif} body{margin:0;background:#f7f9fc;color:#222} header{background:#009fe3;color:#fff;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.1)} .container{max-width:1100px;margin:auto;padding:20px} .panel{background:#fff;border-radius:18px;padding:20px;margin:20px 0;box-shadow:0 4px 16px rgba(0,0,0,.08)} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px} .card{border:2px solid #009fe3;border-radius:16px;padding:18px} select{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;margin-top:10px} .led{background:#111;color:#00ff66;padding:14px;border-radius:12px;font-family:monospace;font-size:18px;letter-spacing:1px} .aprox{color:#d90429;font-weight:bold} 🚆 Trenes Argentinos Blanca 
+Trenes Argentinos | Arribos *{box-sizing:border-box;font-family:Arial,sans-serif} body{margin:0;background:#f5f7fb;color:#1f2937} header{background:#0ea5e9;color:white;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.08)} .container{max-width:1100px;margin:auto;padding:20px} .panel{background:white;border-radius:18px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:20px} .topbar{display:grid;grid-template-columns:1fr 1fr;gap:16px} select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px} .board{background:#111827;color:#22c55e;border-radius:14px;padding:18px;font-family:monospace;font-size:18px;line-height:1.8} .service{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e5e7eb} .badge{background:#dc2626;color:white;padding:4px 10px;border-radius:999px;font-size:12px} a.btn{display:inline-block;margin-top:12px;padding:10px 14px;background:#0ea5e9;color:white;text-decoration:none;border-radius:10px} 🚆 Trenes Argentinos 
 
-Todas las líneas • horarios por estación • NCA en vivo
+Próximos servicios y arribos por línea y estación
 
-🚉 Líneas disponibles Elegí línea: Línea Mitre Línea San Martín Línea Roca Línea Sarmiento 
+Línea Línea Mitre Línea San Martín Línea Roca Línea Sarmiento 
 
-🚉 Estaciones Elegí estación: Retiro Drago Belgrano R Rosario Norte 
+Estación Retiro Drago Belgrano R Palermo 
 
-<div class="panel"> <h2>🚂 NCA (Siempre visible)</h2> <div class="led" id="ncaCountdown">Calculando en cuánto viene...</div> <p class="aprox">APROXIMADO</p> </div> 
+<div class="panel"> <h2>🕒 Próximos trenes</h2> <div class="board" id="board"></div> <a class="btn" href="https://www.tutren.com.ar/" target="_blank">Ver horarios en vivo</a> </div> <div class="panel"> <h2>🚂 NCA</h2> <div class="service"><span>Retiro → Drago</span><strong id="nca1">23 min</strong></div> <div class="service"><span>Retiro → Drago</span><strong id="nca2">3 h 12 min</strong></div> <div style="margin-top:10px"><span class="badge">APROXIMADO</span></div> </div> 
 
-const horarios = { mitre: { retiro: ['19:40 Rosario', '23:00 NCA', '02:30 NCA'], drago: ['20:15-20:40 Rosario', '23:50-00:51 NCA', '03:00-03:50 NCA'], belgrano: ['20:05 Rosario'], rosario: ['Llegada 02:00'] }, sanmartin: { retiro: ['05:30 Pilar', '06:00 José C. Paz'], drago: ['No disponible'], belgrano: ['No disponible'], rosario: ['No disponible'] }, roca: { retiro: ['No disponible'], drago: ['No disponible'], belgrano: ['No disponible'], rosario: ['No disponible'] }, sarmiento: { retiro: ['No disponible'], drago: ['No disponible'], belgrano: ['No disponible'], rosario: ['No disponible'] } }; function updateTimes(){ const line = document.getElementById('line').value; const st = document.getElementById('station').value; const times = horarios[line][st].map(h => `
+function updateBoard(){ const line = document.getElementById('line').value; const station = document.getElementById('station').value; document.getElementById('board').innerHTML = `LÍNEA: ${line}
+`+ `ESTACIÓN: ${station}
 
-🕒 ${h}
-
-`).join(''); document.getElementById('times').innerHTML = `Horarios${times}`; } function updateNCA(){ const now = new Date(); const next = new Date(); next.setHours(23,0,0,0); if(now > next){ next.setDate(next.getDate()+1); } const diff = next - now; const h = Math.floor(diff / 3600000); const m = Math.floor((diff % 3600000) / 60000); document.getElementById('ncaCountdown').textContent = `🚂 NCA llega en ${h}h ${m}m`; } updateTimes(); updateNCA(); setInterval(updateNCA, 60000); 
-
-🌐 Horarios en vivo de confianza 
-
-Consultá todas las líneas y estaciones en tiempo real desde fuentes confiables:
-
-🚆 TuTren 
-
-Todas las líneas, estaciones y arribos en vivo.
-
-🔗 Ver en vivo 
-
-🚉 HorariosTren 
-
-Buscador por línea y estación, incluyendo Drago.
-
-🔗 Abrir horarios 
-
-Líneas disponibles: Mitre, San Martín, Roca, Sarmiento, Belgrano Sur, Belgrano Norte y más.
-
+`+ `► Próximo: 5 min
+`+ `► Siguiente: 14 min
+`+ `► Luego: 26 min`; } updateBoard(); 
