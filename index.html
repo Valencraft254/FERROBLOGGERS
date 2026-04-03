@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferrobloggers</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#000;color:#fff;padding:20px;overflow-x:hidden;}
+header{padding:30px 20px;border-radius:22px;background:linear-gradient(135deg,#000,#111);box-shadow:0 0 20px rgba(0,0,0,.8);margin-bottom:20px;text-align:center;}
+.logo{font-size:48px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 10px rgba(106,92,255,.5);}
+.sub{margin-top:8px;color:#aaa;}
+.controls{display:flex;gap:10px;align-items:center;margin-bottom:20px;}
+.controls input, .controls select{padding:12px;border:1px solid #333;border-radius:14px;background:#111;color:#fff;font-size:16px;flex:1;}
+.controls input::placeholder{color:rgba(255,255,255,0.2);}
+.card{position:relative;background:#111;border-radius:18px;padding:20px;margin-bottom:20px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,.6);}
+.card::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;border:4px solid;border-image:linear-gradient(45deg,#ff4fd8,#00c2ff,#6a5cff,#ff4fd8) 1;animation:rotateBorder 4s linear infinite;border-radius:18px;pointer-events:none;}
+@keyframes rotateBorder{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.card h2{position:relative;z-index:1;font-size:20px;margin-bottom:10px;}
+.card .status{position:relative;z-index:1;display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;margin-bottom:12px;}
+.ok{background:#0a8a3a;color:#fff;}
+.delay{background:#d10000;color:#fff;}
+.card .countdown{position:relative;z-index:1;font-size:18px;font-weight:700;margin-top:10px;}
+.youtube{margin-top:30px;text-align:center;}
+.youtube a{text-decoration:none;color:#ff0000;font-weight:700;font-size:20px;}
+footer{margin-top:25px;text-align:center;color:#777;font-size:13px;}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Ferrobloggers</div>
+<div class="sub">Estado en tiempo real • Sábados y domingos • Contadores automáticos</div>
+</header>
+
+<div class="controls">
+<input type="text" id="buscador" placeholder="🔍 Ferrobloggers">
+<select id="lineaSelect">
+  <option value="">Selecciona línea</option>
+  <option value="nca1">NCA - Madrugada 23:50</option>
+  <option value="nca2">NCA - Madrugada 02:30</option>
+  <option value="rosario">Larga Distancia - Rosario Norte</option>
+  <option value="ferrosur">Ferrosur Roca - Puerto Madero</option>
+</select>
+<select id="estacionSelect">
+  <option value="">Selecciona estación</option>
+</select>
+</div>
+
+<div id="cards">
+
+<!-- NCA 23:50 - 00:56 -->
+<div class="card" data-linea="nca1">
+<h2>NCA • Luis María Drago</h2>
+<div class="status delay">APROXIMADO</div>
+<div class="countdown" id="count_nca1"></div>
+<div>Horario: entre 23:50 y 00:56</div>
+<div>Días: Sábados y domingos</div>
+</div>
+
+<!-- NCA 02:30 - 03:50 -->
+<div class="card" data-linea="nca2">
+<h2>NCA • Madrugada</h2>
+<div class="status delay">APROXIMADO</div>
+<div class="countdown" id="count_nca2"></div>
+<div>Horario: entre 02:30 y 03:50</div>
+<div>Días: Sábados y domingos</div>
+</div>
+
+<!-- Larga Distancia Rosario -->
+<div class="card" data-linea="rosario">
+<h2>Larga Distancia • Rosario Norte</h2>
+<div class="status ok">EN HORARIO</div>
+<div class="countdown" id="count_rosario"></div>
+<div>Horario: entre 19:50 y 20:30</div>
+</div>
+
+<!-- Ferrosur Roca -->
+<div class="card" data-linea="ferrosur">
+<h2>Ferrosur Roca • Puerto Madero</h2>
+<div class="status delay">APROXIMADO</div>
+<div class="countdown" id="count_ferrosur"></div>
+<div>Horario: entre 18:30 y 19:10</div>
+<div>Día: Domingo</div>
+</div>
+
+</div>
+
+<div class="youtube">
+<a href="https://youtube.com/@ferrobloggers?si=32u1gvdCEDCt2pY3" target="_blank">▶️ @ferrobloggers</a>
+</div>
+
+<footer>
+Diseñado para GitHub Pages • Datos ferroviarios en tiempo real
+</footer>
+
+<script>
+// Contador dinámico
+function getNextTime(hour, min, days=[0,6]){ // days 0=domingo,6=sábado
+  const now=new Date();
+  let next=new Date();
+  next.setHours(hour,min,0,0);
+  // Buscar próximo día válido
+  let offset=0;
+  while(!days.includes(next.getDay())){
+    next.setDate(next.getDate()+1);
+    offset++;
+  }
+  if(next<now){next.setDate(next.getDate()+1);}
+  return next;
+}
+
+function updateCountdown(id,hour,min,days=[0,6]){
+  const el=document.getElementById(id);
+  if(!el) return;
+  setInterval(()=>{
+    const now=new Date();
+    let next=getNextTime(hour,min,days);
+    let diff=next-now;
+    if(diff<0) diff=0;
+    const d=Math.floor(diff/1000/60/60/24);
+    const h=Math.floor(diff/1000/60/60)%24;
+    const m=Math.floor(diff/1000/60)%60;
+    const s=Math.floor(diff/1000)%60;
+    el.textContent=`${d}d ${h}h ${m}m ${s}s`;
+  },1000);
+}
+
+// NCA 23:50 Sábados y domingos
+updateCountdown("count_nca1",23,50,[0,6]);
+// NCA 02:30 Sábados y domingos
+updateCountdown("count_nca2",2,30,[0,6]);
+// Larga Distancia Rosario Norte diario
+updateCountdown("count_rosario",19,50,[0,1,2,3,4,5,6]);
+// Ferrosur Roca domingo
+updateCountdown("count_ferrosur",18,30,[0]);
+
+// Buscador
+const buscador=document.getElementById('buscador');
+const cards=document.querySelectorAll('.card');
+buscador.addEventListener('input',function(){
+  const t=this.value.toLowerCase();
+  cards.forEach(c=>{
+    c.style.display=c.innerText.toLowerCase().includes(t)?"block":"none";
+  });
+});
+</script>
+
+</body>
+</html>
