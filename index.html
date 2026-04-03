@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ferrobloggers</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
 body{background:#000;color:#fff;padding:20px;overflow-x:hidden;}
 header{padding:30px 20px;border-radius:22px;background:linear-gradient(135deg,#000,#111);box-shadow:0 0 20px rgba(0,0,0,.8);margin-bottom:20px;text-align:center;}
 .logo{font-size:48px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 10px rgba(106,92,255,.5);}
@@ -37,8 +37,8 @@ footer{margin-top:25px;text-align:center;color:#777;font-size:13px;}
 <input type="text" id="buscador" placeholder="🔍 Ferrobloggers">
 <select id="lineaSelect">
   <option value="">Selecciona línea</option>
-  <option value="nca1">NCA - Madrugada 23:50</option>
-  <option value="nca2">NCA - Madrugada 02:30</option>
+  <option value="nca1">NCA - Luis María Drago 23:50</option>
+  <option value="nca2">NCA - Luis María Drago 02:30</option>
   <option value="rosario">Larga Distancia - Rosario Norte</option>
   <option value="ferrosur">Ferrosur Roca - Puerto Madero</option>
 </select>
@@ -60,7 +60,7 @@ footer{margin-top:25px;text-align:center;color:#777;font-size:13px;}
 
 <!-- NCA 02:30 - 03:50 -->
 <div class="card" data-linea="nca2">
-<h2>NCA • Madrugada</h2>
+<h2>NCA • Luis María Drago</h2>
 <div class="status delay">APROXIMADO</div>
 <div class="countdown" id="count_nca2"></div>
 <div>Horario: entre 02:30 y 03:50</div>
@@ -101,10 +101,8 @@ function getNextTime(hour, min, days=[0,6]){ // days 0=domingo,6=sábado
   let next=new Date();
   next.setHours(hour,min,0,0);
   // Buscar próximo día válido
-  let offset=0;
   while(!days.includes(next.getDay())){
     next.setDate(next.getDate()+1);
-    offset++;
   }
   if(next<now){next.setDate(next.getDate()+1);}
   return next;
