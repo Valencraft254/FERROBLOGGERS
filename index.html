@@ -5,67 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ferrobloggers</title>
 <style>
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f7fa;
-}
-header{
-  background:#fff;
-  padding:20px;
-  text-align:center;
-  box-shadow:0 2px 12px rgba(0,0,0,.08);
-}
-.galaxy-title{
-  font-size:38px;
-  font-weight:900;
-  background:linear-gradient(90deg,#00d4ff,#7c3aed,#ff00ff,#00d4ff);
-  background-size:300% 300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:galaxyShift 5s linear infinite;
-}
-@keyframes galaxyShift{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
-}
-.menu,.sub-menu,.station-panel{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  padding:15px;
-  flex-wrap:wrap;
-}
-button{
-  padding:10px 15px;
-  border:none;
-  border-radius:12px;
-  background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-  cursor:pointer;
-  font-weight:bold;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  padding:20px;
-}
-.card{
-  background:#fff;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 4px 14px rgba(0,0,0,.1);
-}
-.red{
-  color:red;
-  font-weight:bold;
-}
-.small{
-  font-size:13px;
-  opacity:.7;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa}
+header{background:#fff;padding:20px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.galaxy-title{font-size:38px;font-weight:900;background:linear-gradient(90deg,#00d4ff,#7c3aed,#ff00ff,#00d4ff);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:galaxyShift 5s linear infinite}
+@keyframes galaxyShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.menu,.sub-menu,.station-panel{display:flex;justify-content:center;gap:10px;padding:15px;flex-wrap:wrap}
+button{padding:10px 15px;border:none;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding:20px}
+.card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.red{color:red;font-weight:bold}
+.small{font-size:13px;opacity:.7}
 </style>
 </head>
 <body>
@@ -113,15 +62,15 @@ function generarHorarios(cantidad){
   })
 }
 
-// Cargar línea: muestra solo los ramales
+// Cargar línea: solo muestra ramales, nada de horarios
 function cargarLinea(linea){
   lineaActual = linea
   ramalActual = "" // no hay ramal seleccionado
   renderSubmenu()
-  document.getElementById("horarios").innerHTML = "" // limpia horarios
+  document.getElementById("horarios").innerHTML = "" // limpia cualquier horario anterior
 }
 
-// Cargar ramal: muestra solo las estaciones
+// Cargar ramal: muestra panel de estaciones
 function cargarRamal(ramal){
   ramalActual = ramal
   renderEstaciones()
@@ -165,8 +114,8 @@ function mostrarEstacion(estacion){
   `
 }
 
-// ✅ No llamamos a cargarLinea al inicio
-// La página inicia completamente limpia (solo líneas)
+// ✅ NUNCA llamamos a cargarLinea() al inicio
+// Página inicia totalmente limpia: solo botones de líneas
 </script>
 
 </body>
