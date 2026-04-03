@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferrobloggers</title>
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+body{
+  background:#fff;
+  color:#111;
+  padding:20px;
+}
+header{
+  padding:30px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#fff,#f6f6ff);
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  text-align:center;
+  margin-bottom:20px;
+}
+.logo{
+  font-size:48px;
+  font-weight:900;
+  background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.sub{
+  margin-top:8px;
+  color:#666;
+}
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  font-size:16px;
+  margin-bottom:20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:18px;
+}
+.card{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+.linea{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+.status{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+.ok{
+  background:#e8fff0;
+  color:#0a8a3a;
+}
+.delay{
+  background:#ffe8e8;
+  color:#d10000;
+}
+.big{
+  font-size:24px;
+  font-weight:700;
+  margin-top:10px;
+}
+.small{
+  color:#666;
+  margin-top:8px;
+  line-height:1.7;
+}
+.red{
+  color:#d10000;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Ferrobloggers</div>
+  <div class="sub">Estado ferroviario en vivo estilo QuéTren</div>
+</header>
+
+<input type="text" id="busqueda" placeholder="Buscar línea o estación...">
+
+<div class="grid" id="cards">
+
+  <div class="card">
+    <div class="linea">Todas las líneas y estaciones</div>
+    <div class="small">
+
+      <b>Mitre - Tigre:</b><br>
+      Retiro • 3 de Febrero • Carranza • Belgrano C • Núñez • Rivadavia • Vicente López • Olivos • La Lucila • Martínez • Acassuso • San Isidro • Beccar • Victoria • Virreyes • San Fernando • Carupá • Tigre
+      <br><br>
+
+      <b>Mitre - José León Suárez:</b><br>
+      Retiro • Belgrano R • Luis María Drago • Coghlan • Saavedra • Miguelete • San Martín • José León Suárez
+      <br><br>
+
+      <b>Mitre - Zárate:</b><br>
+      Retiro • Belgrano C • San Isidro • Tigre • Escobar • Campana • Zárate
+      <br><br>
+
+      <b>Sarmiento:</b><br>
+      Once • Caballito • Flores • Floresta • Villa Luro • Liniers • Ciudadela • Ramos Mejía • Haedo • Morón • Castelar • Ituzaingó • Merlo • Moreno
+      <br><br>
+
+      <b>San Martín:</b><br>
+      Retiro • Palermo • Villa del Parque • Devoto • Caseros • Hurlingham • San Miguel • José C. Paz • Pilar
+      <br><br>
+
+      <b>Roca:</b><br>
+      Constitución • Avellaneda • Quilmes • Berazategui • La Plata
+      <br><br>
+
+      <b>Belgrano Norte:</b><br>
+      Retiro • Florida • Boulogne • Don Torcuato • Del Viso • Villa Rosa
+      <br><br>
+
+      <b>Belgrano Sur:</b><br>
+      Sáenz • Tapiales • Isidro Casanova • González Catán
+      <br><br>
+
+      <b>Urquiza:</b><br>
+      Federico Lacroze • Devoto • Martín Coronado • Campo de Mayo • General Lemos
+      <br><br>
+
+      <b>Tren de la Costa:</b><br>
+      Maipú • Borges • Libertador • Barrancas • Delta
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="linea">Línea Mitre - Tigre</div>
+    <div class="status ok">En horario</div>
+    <div class="big">12:10</div>
+    <div class="small">Retiro → Tigre</div>
+    <div class="big">12:28</div>
+    <div class="small">Belgrano C → Tigre</div>
+  </div>
+
+  <div class="card">
+    <div class="linea">Larga Distancia - Rosario</div>
+    <div class="status ok">En horario</div>
+    <div class="big">19:57</div>
+    <div class="small">Luis María Drago → Rosario Norte</div>
+    <div class="big">20:25</div>
+    <div class="small">Luis María Drago → Rosario Norte</div>
+  </div>
+
+  <div class="card">
+    <div class="linea">NCA</div>
+    <div class="status delay">Aproximado</div>
+    <div class="big red">23:50</div>
+    <div class="small">Luis María Drago</div>
+    <div class="big red">00:57</div>
+    <div class="small">Luis María Drago</div>
+  </div>
+
+</div>
+
+<script>
+const buscador = document.getElementById("busqueda");
+const cards = document.querySelectorAll(".card");
+
+buscador.addEventListener("input", function() {
+  const texto = this.value.toLowerCase();
+
+  cards.forEach(card => {
+    if (card.innerText.toLowerCase().includes(texto)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+</script>
+
+</body>
+</html>
