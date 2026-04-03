@@ -1,16 +1,53 @@
-Trenes Argentinos | Arribos *{box-sizing:border-box;font-family:Arial,sans-serif} body{margin:0;background:#f5f7fb;color:#1f2937} header{background:#0ea5e9;color:white;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.08)} .container{max-width:1100px;margin:auto;padding:20px} .panel{background:white;border-radius:18px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:20px} .topbar{display:grid;grid-template-columns:1fr 1fr;gap:16px} select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px} .board{background:#111827;color:#22c55e;border-radius:14px;padding:18px;font-family:monospace;font-size:18px;line-height:1.8} .service{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e5e7eb} .badge{background:#dc2626;color:white;padding:4px 10px;border-radius:999px;font-size:12px} a.btn{display:inline-block;margin-top:12px;padding:10px 14px;background:#0ea5e9;color:white;text-decoration:none;border-radius:10px} 🚆 Trenes Argentinos 
+Trenes Argentinos | Horarios *{box-sizing:border-box;font-family:Arial,sans-serif} body{margin:0;background:#eef4fa;color:#1f2937} header{background:#009fe3;color:#fff;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08)} header h1{margin:0;font-size:28px} header p{margin:6px 0 0;font-size:14px;opacity:.95} .container{max-width:1200px;margin:auto;padding:20px} .panel{background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:20px} .selectors{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px} label{font-weight:700;font-size:14px;display:block;margin-bottom:8px} select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px} .schedule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px} .train-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.08);border-left:6px solid #009fe3} .train-card h3{margin-top:0} .status{display:inline-block;margin-top:10px;background:#dbeafe;padding:6px 12px;border-radius:999px;font-weight:700} .aprox{display:inline-block;margin-top:10px;background:#fee2e2;color:#b91c1c;padding:6px 12px;border-radius:999px;font-weight:700} .nca{border-left-color:#dc2626} 🚆 Trenes Argentinos 
 
-Próximos servicios y arribos por línea y estación
+Horarios por línea, estación y servicios aproximados
 
-Línea Línea Mitre Línea San Martín Línea Roca Línea Sarmiento 
+Línea Mitre San Martín Roca Sarmiento 
 
 Estación Retiro Drago Belgrano R Palermo 
 
-<div class="panel"> <h2>🕒 Próximos trenes</h2> <div class="board" id="board"></div> <a class="btn" href="https://www.tutren.com.ar/" target="_blank">Ver horarios en vivo</a> </div> <div class="panel"> <h2>🚂 NCA</h2> <div class="service"><span>Retiro → Drago</span><strong id="nca1">23 min</strong></div> <div class="service"><span>Retiro → Drago</span><strong id="nca2">3 h 12 min</strong></div> <div style="margin-top:10px"><span class="badge">APROXIMADO</span></div> </div> 
+<div class="panel"> <h2>🕒 Próximos horarios</h2> <div class="schedule-grid" id="scheduleGrid"></div> </div> 
 
-function updateBoard(){ const line = document.getElementById('line').value; const station = document.getElementById('station').value; document.getElementById('board').innerHTML = `LÍNEA: ${line}
-`+ `ESTACIÓN: ${station}
+function renderSchedules(){ const line = document.getElementById('line').value; const station = document.getElementById('station').value; const html = ` 
 
-`+ `► Próximo: 5 min
-`+ `► Siguiente: 14 min
-`+ `► Luego: 26 min`; } updateBoard(); 
+🚆 ${line} 
+
+Estación: ${station}
+
+Destino: Próxima cabecera
+
+Hora: 19:40
+
+Andén: 4
+
+En 5 min 
+
+🚆 ${line} 
+
+Estación: ${station}
+
+Destino: Próxima cabecera
+
+Hora: 19:55
+
+Andén: 2
+
+En 20 min 
+
+🚂 NCA 
+
+Retiro → Drago
+
+Hora: 23:00 - 23:20
+
+APROXIMADO • En 23 min 
+
+🚂 NCA 
+
+Retiro → Drago
+
+Hora: 02:30 - 02:45
+
+APROXIMADO • En 3 h 12 min 
+
+`; document.getElementById('scheduleGrid').innerHTML = html; } renderSchedules(); 
