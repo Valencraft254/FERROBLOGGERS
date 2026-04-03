@@ -181,33 +181,34 @@ h1{
 </div>
 
 <script>
+// Función para próximos sábados o domingos
 function nextWeekendTime(hour, minute){
     const now = new Date();
-    let next = new Date();
-
-    const day = now.getDay(); // 0 domingo 6 sábado
+    const day = now.getDay(); // 0 domingo, 6 sábado
     const validDays = [0,6];
 
-    if(validDays.includes(day)){
-        next.setHours(hour, minute, 0, 0);
-        if(now > next){
-            next.setDate(next.getDate() + (day === 6 ? 1 : 6));
-        }
-    } else {
-        let daysUntilSaturday = (6 - day + 7) % 7;
-        next.setDate(now.getDate() + daysUntilSaturday);
-        next.setHours(hour, minute, 0, 0);
-    }
+    let next = new Date();
+    next.setHours(hour, minute, 0, 0);
 
+    // Si hoy no es sábado/domingo o ya pasó la hora
+    if(!validDays.includes(day) || now > next){
+        // Buscar el siguiente sábado o domingo
+        let daysUntilNext = validDays
+            .map(d => (d - day + 7) % 7)
+            .filter(d => d > 0 || (d === 0 && now.getHours() < hour) || (d === 6 && now.getHours() < hour));
+        let addDays = Math.min(...daysUntilNext);
+        next.setDate(now.getDate() + addDays);
+    }
     return next;
 }
 
+// Función para domingos únicamente
 function nextSundayTime(hour, minute){
     const now = new Date();
     let next = new Date();
     next.setHours(hour, minute, 0, 0);
-    const day = now.getDay();
 
+    const day = now.getDay();
     if(day === 0 && now < next){
         return next;
     }
@@ -217,18 +218,18 @@ function nextSundayTime(hour, minute){
     return next;
 }
 
+// Función diaria
 function nextDailyTime(hour, minute){
     const now = new Date();
     let next = new Date();
     next.setHours(hour, minute, 0, 0);
-
     if(now > next){
         next.setDate(next.getDate()+1);
     }
-
     return next;
 }
 
+// Actualizar contadores
 function updateCountdown(id, targetFunc, hour, minute){
     const now = new Date();
     const target = targetFunc(hour, minute);
@@ -251,12 +252,12 @@ setInterval(()=>{
     updateCountdown("count4", nextSundayTime, 18, 50);
 },1000);
 
+// Buscador
 const searchInput = document.getElementById("searchInput");
 const cards = document.querySelectorAll(".card");
 
 searchInput.addEventListener("input", function(){
     const value = this.value.toLowerCase();
-
     cards.forEach(card=>{
         card.style.display = card.innerText.toLowerCase().includes(value)
             ? "block"
