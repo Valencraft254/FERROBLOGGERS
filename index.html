@@ -18,6 +18,35 @@ body{
     color:white;
     padding:20px;
     min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* Bordes galaxy a los costados */
+body::before, body::after{
+    content:"";
+    position:fixed;
+    top:0;
+    width:50px;
+    height:100%;
+    z-index:-1;
+    animation:borderGalaxy 6s linear infinite;
+}
+
+body::before{
+    left:0;
+    background:linear-gradient(to bottom, #8a2be2, #00ffff, #ff00ff, #4b0082);
+}
+
+body::after{
+    right:0;
+    background:linear-gradient(to bottom, #4b0082, #ff00ff, #00ffff, #8a2be2);
+}
+
+@keyframes borderGalaxy{
+    0%{background-position:0 0;}
+    50%{background-position:0 100%;}
+    100%{background-position:0 0;}
 }
 
 h1{
@@ -70,17 +99,8 @@ h1{
     border-radius:20px;
     position:relative;
     overflow:hidden;
-    border:3px solid transparent;
-    animation:borderGalaxy 6s linear infinite;
     box-shadow:0 0 20px rgba(255,255,255,0.1);
-}
-
-@keyframes borderGalaxy{
-    0%{border-color:#8a2be2;}
-    25%{border-color:#00ffff;}
-    50%{border-color:#ff00ff;}
-    75%{border-color:#4b0082;}
-    100%{border-color:#8a2be2;}
+    border:2px solid #333;
 }
 
 .card h2{
@@ -123,6 +143,7 @@ h1{
 
 <div class="container" id="cardsContainer">
 
+    <!-- NCA Luis María Drago -->
     <div class="card">
         <h2>NCA • Luis María Drago</h2>
         <div class="aprox">APROXIMADO</div>
@@ -139,13 +160,22 @@ h1{
         <div class="countdown" id="count2"></div>
     </div>
 
+    <!-- Larga Distancia Rosario Norte -->
     <div class="card">
         <h2>Larga Distancia • Rosario Norte</h2>
-        <div class="aprox">APROXIMADO</div>
         <div class="time">Retiro → Luis María Drago</div>
         <div class="time">Horario: 19:50 - 20:30</div>
         <div class="days">Todos los días</div>
         <div class="countdown" id="count3"></div>
+    </div>
+
+    <!-- Ferrosur Roca Puerto Madero -->
+    <div class="card">
+        <h2>Ferrosur Roca • Puerto Madero</h2>
+        <div class="aprox">APROXIMADO</div>
+        <div class="time">Horario: 18:50 - 19:10</div>
+        <div class="days">Domingos</div>
+        <div class="countdown" id="count4"></div>
     </div>
 
 </div>
@@ -169,6 +199,21 @@ function nextWeekendTime(hour, minute){
         next.setHours(hour, minute, 0, 0);
     }
 
+    return next;
+}
+
+function nextSundayTime(hour, minute){
+    const now = new Date();
+    let next = new Date();
+    next.setHours(hour, minute, 0, 0);
+    const day = now.getDay();
+
+    if(day === 0 && now < next){
+        return next;
+    }
+
+    let daysUntilSunday = (7 - day) % 7;
+    next.setDate(now.getDate() + daysUntilSunday);
     return next;
 }
 
@@ -203,6 +248,7 @@ setInterval(()=>{
     updateCountdown("count1", nextWeekendTime, 23, 50);
     updateCountdown("count2", nextWeekendTime, 2, 30);
     updateCountdown("count3", nextDailyTime, 19, 50);
+    updateCountdown("count4", nextSundayTime, 18, 50);
 },1000);
 
 const searchInput = document.getElementById("searchInput");
