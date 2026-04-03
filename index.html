@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferrobloggers</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f7fa;
+}
+header{
+  background:#ffffff;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+.galaxy-title{
+  font-size:38px;
+  font-weight:900;
+  background:linear-gradient(90deg,#00d4ff,#7c3aed,#ff00ff,#00d4ff);
+  background-size:300% 300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:galaxyShift 5s linear infinite;
+}
+@keyframes galaxyShift{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.subtitle{
+  color:#6b7280;
+}
+.menu,.sub-menu{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  padding:15px;
+  flex-wrap:wrap;
+}
+button{
+  padding:12px 18px;
+  border:none;
+  border-radius:12px;
+  background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+  cursor:pointer;
+  font-weight:bold;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  padding:20px;
+}
+.card{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,.1);
+}
+.red{
+  color:red;
+  font-weight:bold;
+}
+.small{
+  font-size:13px;
+  opacity:.7;
+}
+.station-panel{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.station-btn{
+  padding:8px 12px;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="galaxy-title">🚆 Ferrobloggers</h1>
+  <p class="subtitle">Horarios ordenados • Actualización automática</p>
+</header>
+
+<div class="menu">
+  <button onclick="cargarLinea('Mitre')">Mitre</button>
+  <button onclick="cargarLinea('Roca')">Roca</button>
+  <button onclick="cargarLinea('Sarmiento')">Sarmiento</button>
+  <button onclick="cargarLinea('San Martín')">San Martín</button>
+</div>
+
+<div id="subMenu" class="sub-menu"></div>
+<div id="horarios" class="grid"></div>
+
+<script>
+let lineaActual = "Mitre"
+let ramalActual = "Tigre"
+
+const datos = {
+  "Mitre": {
+    "Tigre": [
+      "Retiro","3 de Febrero","Belgrano C","Belgrano R",
+      "Drago","Núñez","Olivos","San Isidro","Tigre"
+    ],
+    "Suárez": [
+      "Retiro","Belgrano R","Coghlan",
+      "Saavedra","Miguelete","San Martín","José León Suárez"
+    ],
+    "Bart. Mitre": [
+      "Retiro","Belgrano C","Vicente López",
+      "Florida","Bartolomé Mitre"
+    ]
+  },
+  "Roca": {
+    "Principal": [
+      "Constitución","Avellaneda","Lanús",
+      "Lomas","Temperley","La Plata"
+    ]
+  },
+  "Sarmiento": {
+    "Principal": [
+      "Once","Caballito","Flores",
+      "Liniers","Morón","Castelar","Moreno"
+    ]
+  },
+  "San Martín": {
+    "Principal": [
+      "San Martín"
+    ]
+  }
+}
+
+function generarHorariosOrdenados(cantidad){
+  const ahora = new Date()
+  const horarios = []
+  let hora = ahora.getHours()
+  let minuto = ahora.getMinutes()
+
+  for(let i=0;i<cantidad;i++){
+    minuto += 7
+    while(minuto >= 60){
+      minuto -= 60
+      hora++
+    }
+    horarios.push(
+      `${hora.toString().padStart(2,'0')}:${minuto.toString().padStart(2,'0')}`
+    )
+  }
+  return horarios
+}
+
+function cargarLinea(linea){
+  lineaActual = linea
+  const subMenu = document.getElementById("subMenu")
+  subMenu.innerHTML = ""
+
+  if(linea === "Mitre"){
+    subMenu.innerHTML = `
+      <button onclick="cargarRamal('Tigre')">Tigre</button>
+      <button onclick="cargarRamal('Suárez')">Suárez</button>
+      <button onclick="cargarRamal('Bart. Mitre')">Bart. Mitre</button>
+    `
+  } else {
+    Object.keys(datos[linea]).forEach(ramal=>{
+      subMenu.innerHTML += `
+        <button onclick="cargarRamal('${ramal}')">${ramal}</button>
+      `
+    })
+  }
+
+  ramalActual = Object.keys(datos[linea])[0]
+  render()
+}
+
+function cargarRamal(ramal){
+  ramalActual = ramal
+  render()
+}
+
+function mostrarEstacion(estacion,hora){
+  const box = document.getElementById("horarios")
+  box.innerHTML = `
+    <div class="card" style="grid-column:1/-1">
+      <h3>🎯 Estación seleccionada</h3>
+      <p><b>Línea:</b> ${lineaActual}</p>
+      <p><b>Ramal:</b> ${ramalActual}</p>
+      <p>📍 ${estacion}</p>
+      <h2>${hora}</h2>
+      <button onclick="render()">⬅ Volver</button>
+    </div>
+  `
+}
+
+function render(){
+  const box = document.getElementById("horarios")
+  box.innerHTML = ""
+
+  const estaciones = datos[lineaActual][ramalActual]
+  const horarios = generarHorariosOrdenados(estaciones.length)
+
+  box.innerHTML += `
+    <div class="card" style="grid-column:1/-1">
+      <h3>🎛️ Elegir estación</h3>
+      <div class="station-panel" id="panelEstaciones"></div>
+    </div>
+  `
+
+  const panel = document.getElementById("panelEstaciones")
+
+  estaciones.forEach((estacion,index)=>{
+    panel.innerHTML += `
+      <button class="station-btn"
+        onclick="mostrarEstacion('${estacion}','${horarios[index]}')">
+        ${estacion}
+      </button>
+    `
+  })
+
+  estaciones.forEach((estacion,index)=>{
+    box.innerHTML += `
+      <div class="card">
+        <h3>🚆 ${lineaActual}</h3>
+        <p><b>Ramal:</b> ${ramalActual}</p>
+        <p>📍 ${estacion}</p>
+        <h2>${horarios[index]}</h2>
+        <p class="small">Actualizado automáticamente</p>
+      </div>
+    `
+  })
+
+  if(
+    lineaActual === "Mitre" &&
+    (ramalActual === "Suárez" || ramalActual === "Bart. Mitre")
+  ){
+    box.innerHTML += `
+      <div class="card">
+        <h3>🚂 NCA</h3>
+        <p>Retiro: 23:00 - 23:20</p>
+        <p>Drago: 23:50 - 00:51</p>
+        <p>Retiro: 02:30 - 02:45</p>
+        <p>Drago: 03:00 - 03:50</p>
+        <p class="red">APROXIMADO</p>
+      </div>
+
+      <div class="card">
+        <h3>🚄 Rosario</h3>
+        <p>Retiro: 19:40</p>
+        <p>Drago: 20:15 - 20:40</p>
+      </div>
+    `
+  }
+}
+
+cargarLinea("Mitre")
+
+setInterval(()=>{
+  render()
+},30000)
+</script>
+
+</body>
+</html>
