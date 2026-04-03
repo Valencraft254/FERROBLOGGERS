@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferrobloggers</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#ffffff;color:#111;padding:20px}
+header{
+  padding:30px 20px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffffff,#f4f4ff);
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  margin-bottom:20px;
+  text-align:center
+}
+.logo{
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
+.sub{margin-top:8px;color:#666}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px
+}
+.card{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06)
+}
+.linea{font-size:20px;font-weight:700;margin-bottom:10px}
+.status{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:12px
+}
+.ok{background:#e8fff0;color:#0a8a3a}
+.delay{background:#ffe8e8;color:#d10000}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{
+  padding:10px;
+  text-align:left;
+  border-bottom:1px solid #eee;
+  font-size:14px
+}
+.red{color:#d10000;font-weight:700}
+footer{
+  margin-top:25px;
+  text-align:center;
+  color:#777;
+  font-size:13px
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Ferrobloggers</div>
+  <div class="sub">
+    Estado en tiempo real estilo QuéTren • Ordenado por línea, andén, horario y estación
+  </div>
+</header>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="linea">Línea Mitre - José León Suárez</div>
+    <div class="status ok">En horario</div>
+    <table class="table">
+      <tr>
+        <th>Andén</th>
+        <th>Horario</th>
+        <th>Destino</th>
+        <th>Estación</th>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>19:57</td>
+        <td>Rosario</td>
+        <td>Retiro</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>20:40</td>
+        <td>Rosario</td>
+        <td>Luis María Drago</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="linea">NCA - Sábados y Domingos</div>
+    <div class="status delay">Aproximado</div>
+    <table class="table">
+      <tr>
+        <th>Andén</th>
+        <th>Horario</th>
+        <th>Destino</th>
+        <th>Estación</th>
+      </tr>
+      <tr>
+        <td>Vía carga</td>
+        <td class="red">23:50</td>
+        <td>Carga NCA</td>
+        <td>Luis María Drago</td>
+      </tr>
+      <tr>
+        <td>Vía carga</td>
+        <td class="red">00:57</td>
+        <td>Carga NCA</td>
+        <td>Luis María Drago</td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  Diseñado para GitHub Pages • inspirado en datos de QuéTren y Trenes Argentinos
+</footer>
+
+</body>
+</html>
