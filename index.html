@@ -5,221 +5,166 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ferrobloggers</title>
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
-body{
-  background:#fff;
-  color:#111;
-  padding:20px;
-}
-header{
-  padding:30px 20px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#fff,#f6f6ff);
-  box-shadow:0 4px 20px rgba(0,0,0,.08);
-  margin-bottom:20px;
-  text-align:center;
-}
-.logo{
-  font-size:48px;
-  font-weight:900;
-  letter-spacing:2px;
-  background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.sub{
-  margin-top:8px;
-  color:#666;
-}
-.controls{
-  display:grid;
-  gap:15px;
-  margin-bottom:20px;
-}
-input,select{
-  padding:14px;
-  border:1px solid #ddd;
-  border-radius:14px;
-  font-size:16px;
-}
-.info,.card{
-  background:#fff;
-  border:1px solid #eee;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
-}
-.info{
-  margin-bottom:20px;
-  line-height:1.7;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:18px;
-}
-.linea{
-  font-size:20px;
-  font-weight:700;
-  margin-bottom:10px;
-}
-.status{
-  display:inline-block;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:12px;
-}
-.ok{
-  background:#e8fff0;
-  color:#0a8a3a;
-}
-.delay{
-  background:#ffe8e8;
-  color:#d10000;
-}
-.table{
-  width:100%;
-  border-collapse:collapse;
-}
-.table th,.table td{
-  padding:10px;
-  text-align:left;
-  border-bottom:1px solid #eee;
-  font-size:14px;
-}
-.red{
-  color:#d10000;
-  font-weight:700;
-}
-.youtube{
-  text-align:center;
-  margin-top:30px;
-}
-.youtube a{
-  text-decoration:none;
-  color:#ff0000;
-  font-weight:700;
-  font-size:20px;
-}
-footer{
-  text-align:center;
-  margin-top:25px;
-  color:#777;
-  font-size:13px;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#fff;color:#111;padding:20px}
+header{padding:30px 20px;border-radius:22px;background:linear-gradient(135deg,#fff,#f6f6ff);box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:20px;text-align:center}
+.logo{font-size:48px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{margin-top:8px;color:#666}
+.controls{display:grid;gap:15px;margin-bottom:20px}
+input,select{padding:14px;border:1px solid #ddd;border-radius:14px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.card,.info{background:#fff;border:1px solid #eee;border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.info{margin-bottom:20px;line-height:1.8}
+.linea{font-size:20px;font-weight:700;margin-bottom:10px}
+.status{display:inline-block;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:12px}
+.ok{background:#e8fff0;color:#0a8a3a}
+.delay{background:#ffe8e8;color:#d10000}
+.tiempo{font-size:24px;font-weight:700;margin-top:12px}
+.hora{font-size:14px;color:#666}
+.youtube{text-align:center;margin-top:30px}
+.youtube a{text-decoration:none;color:#ff0000;font-weight:700;font-size:20px}
+footer{text-align:center;margin-top:25px;color:#777;font-size:13px}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Ferrobloggers</div>
-  <div class="sub">Estado en tiempo real estilo QuéTren • línea • andén • horario • estación</div>
+<div class="logo">Ferrobloggers</div>
+<div class="sub">Estado en tiempo real estilo QuéTren</div>
 </header>
 
 <div class="controls">
-  <input type="text" id="busqueda" placeholder="Buscar estación o línea...">
+<input type="text" placeholder="Buscar estación o línea...">
 
-  <select id="origen">
-    <option>Seleccionar estación donde estoy</option>
-    <option>Retiro</option>
-    <option>Belgrano C</option>
-    <option>Luis María Drago</option>
-    <option>Tigre</option>
-    <option>Palermo</option>
-    <option>Caseros</option>
-    <option>Rosario Norte</option>
-  </select>
+<select>
+<option>Seleccionar estación donde estoy</option>
+<option>Retiro</option>
+<option>Belgrano C</option>
+<option>Luis María Drago</option>
+<option>Tigre</option>
+<option>Palermo</option>
+<option>Rosario Norte</option>
+<option>Constitución</option>
+<option>Once</option>
+<option>Lacroze</option>
+</select>
 
-  <select id="destino">
-    <option>Seleccionar a cuál quiero ir</option>
-    <option>Retiro</option>
-    <option>Belgrano C</option>
-    <option>Luis María Drago</option>
-    <option>Tigre</option>
-    <option>Palermo</option>
-    <option>Caseros</option>
-    <option>Rosario Norte</option>
-  </select>
-
-  <select>
-    <option>Todas las líneas</option>
-    <option>Mitre - Tigre</option>
-    <option>Mitre - José León Suárez</option>
-    <option>Mitre - Zárate</option>
-    <option>San Martín</option>
-    <option>Sarmiento</option>
-    <option>Roca</option>
-    <option>Urquiza</option>
-    <option>Belgrano Sur</option>
-    <option>Tren de la Costa</option>
-    <option>Larga Distancia - Rosario</option>
-    <option>NCA</option>
-  </select>
+<select>
+<option>Seleccionar a cuál quiero ir</option>
+<option>Retiro</option>
+<option>Belgrano C</option>
+<option>Luis María Drago</option>
+<option>Tigre</option>
+<option>Palermo</option>
+<option>Rosario Norte</option>
+<option>Constitución</option>
+<option>Once</option>
+<option>Lacroze</option>
+</select>
 </div>
 
 <div class="info">
-  <b>Todas las líneas y estaciones</b><br><br>
-  Mitre Tigre: Retiro • Belgrano C • San Isidro • Tigre<br><br>
-  Mitre Suárez: Retiro • Belgrano R • Luis María Drago • José León Suárez<br><br>
-  Mitre Zárate: Retiro • Escobar • Campana • Zárate<br><br>
-  San Martín: Retiro • Palermo • Caseros • José C. Paz • Pilar<br><br>
-  Sarmiento: Once • Flores • Morón • Moreno<br><br>
-  Roca: Constitución • Quilmes • La Plata<br><br>
-  Urquiza: Lacroze • Lemos<br><br>
-  Belgrano Sur: Sáenz • Tapiales • González Catán<br><br>
-  Rosario: Retiro • Campana • San Nicolás • Rosario Norte
+<b>Todas las líneas y estaciones</b><br><br>
+
+<b>Mitre - Tigre:</b><br>
+Retiro • 3 de Febrero • Carranza • Belgrano C • Núñez • Rivadavia • Vicente López • Olivos • La Lucila • Martínez • Acassuso • San Isidro • Beccar • Victoria • Virreyes • San Fernando • Carupá • Tigre<br><br>
+
+<b>Mitre - José León Suárez:</b><br>
+Retiro • Belgrano R • Drago • Coghlan • Saavedra • Miguelete • San Martín • José León Suárez<br><br>
+
+<b>Mitre - Zárate:</b><br>
+Retiro • Belgrano C • San Isidro • Tigre • Escobar • Campana • Zárate<br><br>
+
+<b>San Martín:</b><br>
+Retiro • Palermo • Villa del Parque • Devoto • Sáenz Peña • Caseros • Hurlingham • San Miguel • José C. Paz • Pilar<br><br>
+
+<b>Sarmiento:</b><br>
+Once • Caballito • Flores • Liniers • Ramos Mejía • Morón • Castelar • Ituzaingó • Merlo • Moreno<br><br>
+
+<b>Roca:</b><br>
+Constitución • Avellaneda • Quilmes • Berazategui • La Plata<br><br>
+
+<b>Urquiza:</b><br>
+Federico Lacroze • Artigas • Arata • Lemos<br><br>
+
+<b>Belgrano Sur:</b><br>
+Sáenz • Tapiales • González Catán<br><br>
+
+<b>Tren de la Costa:</b><br>
+Maipú • Borges • Libertador • Anchorena • Barrancas • San Isidro R • Punta Chica • Marina Nueva • San Fernando R • Delta<br><br>
+
+<b>Larga Distancia Rosario:</b><br>
+Retiro • Campana • San Pedro • San Nicolás • Rosario Sur • Rosario Norte
 </div>
 
 <div class="grid">
-  <div class="card">
-    <div class="linea">Línea Mitre - Tigre</div>
-    <div class="status ok">En horario</div>
-    <table class="table">
-      <tr><th>Andén</th><th>Horario</th><th>Destino</th><th>Estación</th></tr>
-      <tr><td>1</td><td>12:10</td><td>Tigre</td><td>Retiro</td></tr>
-      <tr><td>1</td><td>12:28</td><td>Tigre</td><td>Belgrano C</td></tr>
-    </table>
-  </div>
 
-  <div class="card">
-    <div class="linea">Larga Distancia - Rosario</div>
-    <div class="status ok">En horario</div>
-    <table class="table">
-      <tr><th>Andén</th><th>Horario</th><th>Destino</th><th>Estación</th></tr>
-      <tr><td>1</td><td>19:57</td><td>Rosario Norte</td><td>Luis María Drago</td></tr>
-      <tr><td>1</td><td>20:25</td><td>Rosario Norte</td><td>Luis María Drago</td></tr>
-      <tr><td>1</td><td>20:40</td><td>Rosario Norte</td><td>Retiro</td></tr>
-    </table>
-  </div>
+<div class="card">
+<div class="linea">Línea Mitre - Tigre</div>
+<div class="status ok" id="estadoMitre">En horario</div>
+<div class="hora" id="horaActual">Hora actual: --</div>
+<div class="tiempo" id="proximoMitre">Cargando...</div>
+<div style="margin-top:10px;color:#666;">Destino: Tigre • Andén 1</div>
+</div>
+
+<div class="card">
+<div class="linea">Larga Distancia - Rosario</div>
+<div class="status ok" id="estadoRosario">En horario</div>
+<div class="tiempo" id="proximoRosario">Cargando...</div>
+<div style="margin-top:10px;color:#666;">Destino: Rosario Norte</div>
+</div>
+
+<div class="card">
+<div class="linea">NCA - Carga</div>
+<div class="status delay">Aproximado</div>
+<div class="tiempo">23:50</div>
+<div style="margin-top:10px;color:#666;">Luis María Drago</div>
+</div>
+
 </div>
 
 <div class="youtube">
-  <a href="https://youtube.com/@ferrobloggers?si=32u1gvdCEDCt2pY3" target="_blank">
-    ▶️ @ferrobloggers
-  </a>
+<a href="https://youtube.com/@ferrobloggers?si=32u1gvdCEDCt2pY3" target="_blank">
+▶️ @ferrobloggers
+</a>
 </div>
 
-<footer>
-  Diseñado para GitHub Pages • datos ferroviarios en tiempo real
-</footer>
+<footer>Diseñado para GitHub Pages • Ferrobloggers</footer>
 
 <script>
-const buscador = document.getElementById("busqueda");
-const cards = document.querySelectorAll(".card");
+function actualizarHorarios(){
+ const ahora=new Date();
 
-buscador.addEventListener("input", function(){
-  const t = this.value.toLowerCase();
-  cards.forEach(c=>{
-    c.style.display = c.innerText.toLowerCase().includes(t) ? "block" : "none";
-  });
-});
+ const horas=String(ahora.getHours()).padStart(2,'0');
+ const mins=String(ahora.getMinutes()).padStart(2,'0');
+ const segs=String(ahora.getSeconds()).padStart(2,'0');
+
+ document.getElementById("horaActual").innerHTML=
+   "Hora actual: "+horas+":"+mins+":"+segs;
+
+ let faltaMitre=10-(ahora.getMinutes()%10);
+ if(faltaMitre===10)faltaMitre=0;
+
+ if(faltaMitre<=1){
+   document.getElementById("estadoMitre").innerHTML="Llegando";
+   document.getElementById("estadoMitre").className="status delay";
+   document.getElementById("proximoMitre").innerHTML="🚆 Llegando ahora";
+ }else{
+   document.getElementById("estadoMitre").innerHTML="En horario";
+   document.getElementById("estadoMitre").className="status ok";
+   document.getElementById("proximoMitre").innerHTML=
+     "Próximo en "+faltaMitre+" min";
+ }
+
+ let faltaRosario=30-(ahora.getMinutes()%30);
+ if(faltaRosario===30)faltaRosario=0;
+
+ document.getElementById("proximoRosario").innerHTML=
+   "🚄 Próximo en "+faltaRosario+" min";
+}
+
+actualizarHorarios();
+setInterval(actualizarHorarios,1000);
 </script>
 
 </body>
