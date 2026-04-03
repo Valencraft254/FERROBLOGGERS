@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferrobloggers</title>
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#050505;
+  color:white;
+  padding:12px;
+  min-height:100vh;
+}
+
+@keyframes galaxyBorder{
+  0%{box-shadow:0 0 15px #6a5cff,0 0 25px #6a5cff}
+  25%{box-shadow:0 0 15px #00c2ff,0 0 25px #00c2ff}
+  50%{box-shadow:0 0 15px #ff4fd8,0 0 25px #ff4fd8}
+  75%{box-shadow:0 0 15px #7dff7d,0 0 25px #7dff7d}
+  100%{box-shadow:0 0 15px #6a5cff,0 0 25px #6a5cff}
+}
+
+.wrapper{
+  min-height:calc(100vh - 24px);
+  border:3px solid #6a5cff;
+  border-radius:24px;
+  padding:20px;
+  animation:galaxyBorder 6s linear infinite;
+  background:#050505;
+}
+
+header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.logo{
+  font-size:52px;
+  font-weight:900;
+  background:linear-gradient(90deg,#6a5cff,#00c2ff,#ff4fd8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.search-box{
+  margin:25px auto;
+  max-width:700px;
+  position:relative;
+}
+
+.search-box::before{
+  content:"🔍";
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:.6;
+}
+
+input{
+  width:100%;
+  padding:16px 16px 16px 48px;
+  border-radius:16px;
+  border:1px solid #333;
+  background:#111;
+  color:white;
+  font-size:17px;
+}
+
+input::placeholder{
+  color:rgba(255,255,255,.15);
+  font-weight:700;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:#111;
+  border:1px solid #222;
+  border-radius:18px;
+  padding:20px;
+}
+
+.linea{
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.status{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.red{
+  background:#2b0000;
+  color:#ff3d3d;
+}
+
+.green{
+  background:#002b0e;
+  color:#57ff88;
+}
+
+.big{
+  font-size:28px;
+  font-weight:800;
+  margin-top:10px;
+}
+
+.small{
+  color:#bbb;
+  margin-top:8px;
+  line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+<header>
+  <div class="logo">Ferrobloggers</div>
+</header>
+
+<div class="search-box">
+  <input id="search" placeholder="Ferrobloggers">
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="linea">NCA • Luis María Drago</div>
+    <div class="status red">APROXIMADO</div>
+    <div class="big" id="nca1">Calculando...</div>
+    <div class="small">Sábados y domingos • 23:50 a 00:56</div>
+  </div>
+
+  <div class="card">
+    <div class="linea">NCA • Madrugada</div>
+    <div class="status red">APROXIMADO</div>
+    <div class="big" id="nca2">Calculando...</div>
+    <div class="small">Domingos • 02:30 a 03:50</div>
+  </div>
+
+  <div class="card">
+    <div class="linea">Larga Distancia • Rosario Norte</div>
+    <div class="status green">EN HORARIO</div>
+    <div class="big" id="rosario">Calculando...</div>
+    <div class="small">Todos los días • 19:50 a 20:30</div>
+  </div>
+
+  <div class="card">
+    <div class="linea">Ferrosur Roca • Puerto Madero</div>
+    <div class="status red">APROXIMADO</div>
+    <div class="big" id="ferrosur">Calculando...</div>
+    <div class="small">Domingos • 18:30 a 19:10</div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+function nextSaturdayNight(){
+  const now=new Date();
+  let t=new Date(now);
+  let diff=(6-now.getDay()+7)%7;
+  if(diff===0&&now.getHours()>=23) diff=7;
+  t.setDate(now.getDate()+diff);
+  t.setHours(23,50,0,0);
+  return t;
+}
+
+function nextSundayEarly(){
+  const now=new Date();
+  let t=new Date(now);
+  let diff=(7-now.getDay())%7;
+  if(diff===0&&now.getHours()>=2) diff=7;
+  t.setDate(now.getDate()+diff);
+  t.setHours(2,30,0,0);
+  return t;
+}
+
+function nextSundayEvening(){
+  const now=new Date();
+  let t=new Date(now);
+  let diff=(7-now.getDay())%7;
+  if(diff===0&&now.getHours()>=18) diff=7;
+  t.setDate(now.getDate()+diff);
+  t.setHours(18,30,0,0);
+  return t;
+}
+
+function nextDailyTime(h,m){
+  const now=new Date();
+  let t=new Date();
+  t.setHours(h,m,0,0);
+  if(t<=now) t.setDate(t.getDate()+1);
+  return t;
+}
+
+function formatCountdown(target){
+  let diff=target-new Date();
+  let d=Math.floor(diff/86400000);
+  diff%=86400000;
+  let h=Math.floor(diff/3600000);
+  diff%=3600000;
+  let m=Math.floor(diff/60000);
+  let s=Math.floor((diff%60000)/1000);
+  return `${d}d ${h}h ${m}m ${s}s`;
+}
+
+function updateTimes(){
+  document.getElementById("nca1").innerText=formatCountdown(nextSaturdayNight());
+  document.getElementById("nca2").innerText=formatCountdown(nextSundayEarly());
+  document.getElementById("rosario").innerText=formatCountdown(nextDailyTime(19,50));
+  document.getElementById("ferrosur").innerText=formatCountdown(nextSundayEvening());
+}
+
+setInterval(updateTimes,1000);
+updateTimes();
+
+document.getElementById("search").addEventListener("input",function(){
+  const text=this.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card=>{
+    card.style.display=card.innerText.toLowerCase().includes(text)
+      ? "block"
+      : "none";
+  });
+});
+</script>
+
+</body>
+</html>
