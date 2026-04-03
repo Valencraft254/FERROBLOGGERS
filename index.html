@@ -18,35 +18,6 @@ body{
     color:white;
     padding:20px;
     min-height:100vh;
-    position:relative;
-    overflow-x:hidden;
-}
-
-/* Bordes galaxy a los costados */
-body::before, body::after{
-    content:"";
-    position:fixed;
-    top:0;
-    width:50px;
-    height:100%;
-    z-index:-1;
-    animation:borderGalaxy 6s linear infinite;
-}
-
-body::before{
-    left:0;
-    background:linear-gradient(to bottom, #8a2be2, #00ffff, #ff00ff, #4b0082);
-}
-
-body::after{
-    right:0;
-    background:linear-gradient(to bottom, #4b0082, #ff00ff, #00ffff, #8a2be2);
-}
-
-@keyframes borderGalaxy{
-    0%{background-position:0 0;}
-    50%{background-position:0 100%;}
-    100%{background-position:0 0;}
 }
 
 h1{
@@ -181,7 +152,7 @@ h1{
 </div>
 
 <script>
-// Función para próximos sábados o domingos
+// Próximo sábado o domingo
 function nextWeekendTime(hour, minute){
     const now = new Date();
     const day = now.getDay(); // 0 domingo, 6 sábado
@@ -190,9 +161,7 @@ function nextWeekendTime(hour, minute){
     let next = new Date();
     next.setHours(hour, minute, 0, 0);
 
-    // Si hoy no es sábado/domingo o ya pasó la hora
     if(!validDays.includes(day) || now > next){
-        // Buscar el siguiente sábado o domingo
         let daysUntilNext = validDays
             .map(d => (d - day + 7) % 7)
             .filter(d => d > 0 || (d === 0 && now.getHours() < hour) || (d === 6 && now.getHours() < hour));
@@ -202,30 +171,26 @@ function nextWeekendTime(hour, minute){
     return next;
 }
 
-// Función para domingos únicamente
+// Próximo domingo
 function nextSundayTime(hour, minute){
     const now = new Date();
     let next = new Date();
     next.setHours(hour, minute, 0, 0);
-
     const day = now.getDay();
-    if(day === 0 && now < next){
-        return next;
-    }
+
+    if(day === 0 && now < next) return next;
 
     let daysUntilSunday = (7 - day) % 7;
     next.setDate(now.getDate() + daysUntilSunday);
     return next;
 }
 
-// Función diaria
+// Próximo día
 function nextDailyTime(hour, minute){
     const now = new Date();
     let next = new Date();
     next.setHours(hour, minute, 0, 0);
-    if(now > next){
-        next.setDate(next.getDate()+1);
-    }
+    if(now > next) next.setDate(next.getDate()+1);
     return next;
 }
 
