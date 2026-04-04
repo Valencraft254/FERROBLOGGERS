@@ -8,13 +8,10 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body{
     background-color:#0a0a0a; 
-    background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px),
-                      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: 0 0, 20px 20px;
     color:white;
     padding:20px;
     min-height:100vh;
+    overflow-x:hidden;
 }
 h1{
     text-align:center;
@@ -23,10 +20,15 @@ h1{
     letter-spacing:2px;
     text-shadow: 0 0 10px #00ffea, 0 0 20px #ff00ff;
 }
-.search-box{
-    max-width:600px;
+.top-bar{
+    max-width:900px;
     margin:0 auto 30px auto;
     position:relative;
+}
+.search-box{
+    position:relative;
+    max-width:600px;
+    margin:0 auto 30px auto;
 }
 .search-box input{
     width:100%;
@@ -39,27 +41,19 @@ h1{
     outline:none;
     box-shadow: 0 0 10px #00ffea, 0 0 20px #ff00ff;
 }
-.search-box input::placeholder{
-    color:rgba(255,255,255,0.25);
-}
-.search-icon{
-    position:absolute;
-    left:18px;
-    top:50%;
-    transform:translateY(-50%);
-    color:gray;
-    font-size:20px;
-}
+.search-box input::placeholder{color:rgba(255,255,255,0.25);}
+.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:gray;font-size:20px;}
+
 .container{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
     gap:25px;
 }
+
 .card{
     background: rgba(15,15,15,0.95);
     padding:25px;
     border-radius:20px;
-    position:relative;
     overflow:hidden;
     box-shadow: 0 0 20px rgba(0,255,234,0.5), 0 0 40px rgba(255,0,255,0.3);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -80,9 +74,48 @@ h1{
 .time{font-size:18px;margin:10px 0;}
 .countdown{font-size:22px;font-weight:bold;margin-top:15px;}
 .days{color:#aaa;margin-top:10px;}
+
+/* Pantalla de carga */
+#loader{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#0a0a0a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+}
+#loader-text{
+    color:white;
+    font-size:20px;
+    margin-bottom:15px;
+}
+#loader-bar{
+    width:300px;
+    height:15px;
+    background: rgba(255,255,255,0.1);
+    border-radius:10px;
+    overflow:hidden;
+}
+#loader-progress{
+    width:0%;
+    height:100%;
+    background: #00ffea;
+    transition: width 0.2s linear;
+}
 </style>
 </head>
 <body>
+
+<!-- Pantalla de carga -->
+<div id="loader">
+    <div id="loader-text">Cargando...</div>
+    <div id="loader-bar"><div id="loader-progress"></div></div>
+</div>
 
 <h1>🌌 Ferrobloggers</h1>
 <div class="search-box">
@@ -102,7 +135,7 @@ h1{
 
 <div class="card" id="ldCard">
     <h2>Larga Distancia • Luis María Drago</h2>
-<div class="aprox">APROXIMADO</div>
+    <div class="time">Retiro → Luis María Drago</div>
     <div class="time" id="ldTime1">Horario: 11:00 - 12:10</div>
     <div class="time" id="ldTime2">Horario: 17:50 - 18:50</div>
     <div class="time" id="ldTime3">Horario: 19:50 - 20:30</div>
@@ -121,17 +154,29 @@ h1{
 </div>
 
 <script>
-// Configuración NCA
+// Simulación de carga
+let progress = 0;
+const loaderProgress = document.getElementById("loader-progress");
+const loader = document.getElementById("loader");
+const interval = setInterval(()=>{
+    progress += 2;
+    loaderProgress.style.width = progress + "%";
+    if(progress >= 100){
+        clearInterval(interval);
+        loader.style.display="none";
+    }
+},40); // 40ms x 50 pasos = 2000ms = 2s
+
+// Contadores NCA y Larga Distancia
 const ncaSchedules = [
     {startH:23,startM:50,endH:0,endM:56},
     {startH:2,startM:30,endH:3,endM:50}
 ];
-const ncaDays = [6,0]; // sábado=6, domingo=0
+const ncaDays = [6,0];
 
 function formatTime(schedule){
     return `${String(schedule.startH).padStart(2,'0')}:${String(schedule.startM).padStart(2,'0')} - ${String(schedule.endH).padStart(2,'0')}:${String(schedule.endM).padStart(2,'0')}`;
 }
-
 function getCurrentNCA(){
     const now = new Date();
     const day = now.getDay();
@@ -146,7 +191,6 @@ function getCurrentNCA(){
     }
     return getNextNCA();
 }
-
 function getNextNCA(){
     const now = new Date();
     const day = now.getDay();
@@ -167,7 +211,6 @@ function getNextTrainTime(times, daysAllowed){
         if(end<start) end.setDate(end.getDate()+1);
         if(daysAllowed.includes(day) && now<end) return start>now?start:end;
     }
-    // Si ya pasaron, buscar siguiente día permitido
     let addDays = 1;
     while(!daysAllowed.includes((day+addDays)%7)) addDays++;
     const nextStart = new Date(); nextStart.setDate(now.getDate()+addDays);
@@ -177,16 +220,10 @@ function getNextTrainTime(times, daysAllowed){
 }
 
 function updateCountdown(id,startTime){
-    if(!startTime){
-        document.getElementById(id).innerHTML="Próximo tren: N/A";
-        return;
-    }
+    if(!startTime){document.getElementById(id).innerHTML="Próximo tren: N/A"; return;}
     const now = new Date();
     const diff = startTime - now;
-    if(diff<0){
-        document.getElementById(id).innerHTML="En curso o pasó";
-        return;
-    }
+    if(diff<0){document.getElementById(id).innerHTML="En curso o pasó"; return;}
     const days = Math.floor(diff/(1000*60*60*24));
     const hours = Math.floor((diff/(1000*60*60))%24);
     const minutes = Math.floor((diff/(1000*60))%60);
@@ -196,7 +233,6 @@ function updateCountdown(id,startTime){
 
 setInterval(()=>{
     const nextNCA = getCurrentNCA();
-    document.getElementById('ncaCard').style.display='block';
     document.getElementById('ncaTime').innerText=nextNCA.text;
     updateCountdown("count1",nextNCA.start);
 
