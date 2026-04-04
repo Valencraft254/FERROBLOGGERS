@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body{
-    background-color:#0a0a0a; /* fondo negro profesional */
+    background-color:#0a0a0a; 
     background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px),
                       radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -71,7 +71,7 @@ h1{
 .card h2{margin-bottom:10px;font-size:24px;}
 .aprox{
     color:red;
-    font-weight:bold; /* bold aplicado */
+    font-weight:bold;
     font-size:18px;
     margin-bottom:10px;
     text-transform: uppercase;
@@ -92,7 +92,6 @@ h1{
 
 <div class="container">
 
-<!-- NCA Luis María Drago -->
 <div class="card" id="ncaCard">
     <h2>NCA • Luis María Drago</h2>
     <div class="aprox">APROXIMADO</div>
@@ -101,16 +100,16 @@ h1{
     <div class="countdown" id="count1"></div>
 </div>
 
-<!-- Larga Distancia solo Luis María Drago -->
-<div class="card">
+<div class="card" id="ldCard">
     <h2>Larga Distancia • Luis María Drago</h2>
     <div class="time">Retiro → Luis María Drago</div>
-    <div class="time">Horario: 19:50 - 20:30</div>
+    <div class="time" id="ldTime1">Horario: 11:00 - 12:10</div>
+    <div class="time" id="ldTime2">Horario: 17:50 - 18:50</div>
+    <div class="time" id="ldTime3">Horario: 19:50 - 20:30</div>
     <div class="days">Todos los días</div>
     <div class="countdown" id="count2"></div>
 </div>
 
-<!-- Ferrosur Roca Puerto Madero -->
 <div class="card">
     <h2>Ferrosur Roca • Puerto Madero</h2>
     <div class="aprox">APROXIMADO</div>
@@ -159,20 +158,22 @@ function getNextNCA(){
     return {schedule:s,start:start,end:null,text:`Próximo: ${formatTime(s)}`};
 }
 
-function getNextTrainTime(startH,startM,endH,endM,daysAllowed){
+function getNextTrainTime(times, daysAllowed){
     const now = new Date();
     const day = now.getDay();
-    let nextStart = new Date(); nextStart.setHours(startH,startM,0,0);
-    let nextEnd = new Date(); nextEnd.setHours(endH,endM,0,0);
-    if(nextEnd<nextStart) nextEnd.setDate(nextEnd.getDate()+1);
-    if(daysAllowed.includes(day) && now<nextEnd){
-        return nextStart>now?nextStart:nextEnd;
-    } else {
-        let addDays = 1;
-        while(!daysAllowed.includes((day+addDays)%7)) addDays++;
-        nextStart.setDate(nextStart.getDate()+addDays);
-        return nextStart;
+    for(const t of times){
+        let start = new Date(); start.setHours(t.startH,t.startM,0,0);
+        let end = new Date(); end.setHours(t.endH,t.endM,0,0);
+        if(end<start) end.setDate(end.getDate()+1);
+        if(daysAllowed.includes(day) && now<end) return start>now?start:end;
     }
+    // Si ya pasaron, buscar siguiente día permitido
+    let addDays = 1;
+    while(!daysAllowed.includes((day+addDays)%7)) addDays++;
+    const nextStart = new Date(); nextStart.setDate(now.getDate()+addDays);
+    const t = times[0];
+    nextStart.setHours(t.startH,t.startM,0,0);
+    return nextStart;
 }
 
 function updateCountdown(id,startTime){
@@ -199,8 +200,13 @@ setInterval(()=>{
     document.getElementById('ncaTime').innerText=nextNCA.text;
     updateCountdown("count1",nextNCA.start);
 
-    updateCountdown("count2",getNextTrainTime(19,50,20,30,[0,1,2,3,4,5,6]));
-    updateCountdown("count3",getNextTrainTime(18,50,19,10,[0]));
+    const ldTimes = [
+        {startH:11,startM:0,endH:12,endM:10},
+        {startH:17,startM:50,endH:18,endM:50},
+        {startH:19,startM:50,endH:20,endM:30}
+    ];
+    updateCountdown("count2",getNextTrainTime(ldTimes,[0,1,2,3,4,5,6]));
+    updateCountdown("count3",getNextTrainTime([{startH:18,startM:50,endH:19,endM:10}],[0]));
 },1000);
 
 const searchInput=document.getElementById("searchInput");
