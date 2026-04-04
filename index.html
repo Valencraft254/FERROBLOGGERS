@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body{
-    background-color:#000; /* fondo negro sólido */
+    background-color:#0a0a0a; /* fondo negro profesional */
     background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px),
                       radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -16,23 +16,57 @@ body{
     padding:20px;
     min-height:100vh;
 }
-h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
-.search-box{max-width:600px;margin:0 auto 30px auto;position:relative;}
-.search-box input{width:100%;padding:15px 20px 15px 50px;border:none;border-radius:15px;background:rgba(0,0,0,0.6);color:white;font-size:18px;outline:none;border:2px solid #333;}
-.search-box input::placeholder{color:rgba(255,255,255,0.25);}
-.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:gray;font-size:20px;}
-.container{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px;}
+h1{
+    text-align:center;
+    margin-bottom:25px;
+    font-size:40px;
+    letter-spacing:2px;
+    text-shadow: 0 0 10px #00ffea, 0 0 20px #ff00ff;
+}
+.search-box{
+    max-width:600px;
+    margin:0 auto 30px auto;
+    position:relative;
+}
+.search-box input{
+    width:100%;
+    padding:15px 20px 15px 50px;
+    border:none;
+    border-radius:15px;
+    background:rgba(20,20,20,0.9);
+    color:white;
+    font-size:18px;
+    outline:none;
+    box-shadow: 0 0 10px #00ffea, 0 0 20px #ff00ff;
+}
+.search-box input::placeholder{
+    color:rgba(255,255,255,0.25);
+}
+.search-icon{
+    position:absolute;
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:gray;
+    font-size:20px;
+}
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
 .card{
-    background: rgba(0,0,0,0.7);
+    background: rgba(15,15,15,0.95);
     padding:25px;
     border-radius:20px;
     position:relative;
     overflow:hidden;
-    box-shadow: 0 0 15px #00ffea, 0 0 30px #ff00ff;
-    border:2px solid;
-    border-image-slice:1;
-    border-width: 2px;
-    border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffcc00, #ff00ff);
+    box-shadow: 0 0 20px rgba(0,255,234,0.5), 0 0 40px rgba(255,0,255,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px rgba(0,255,234,0.7), 0 0 60px rgba(255,0,255,0.5);
 }
 .card h2{margin-bottom:10px;font-size:24px;}
 .aprox{color:red;font-weight:bold;font-size:18px;margin-bottom:10px;}
@@ -51,6 +85,7 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
 
 <div class="container">
 
+<!-- NCA Luis María Drago -->
 <div class="card" id="ncaCard">
     <h2>NCA • Luis María Drago</h2>
     <div class="aprox">APROXIMADO</div>
@@ -59,6 +94,7 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
     <div class="countdown" id="count1"></div>
 </div>
 
+<!-- Larga Distancia solo Luis María Drago -->
 <div class="card">
     <h2>Larga Distancia • Luis María Drago</h2>
     <div class="time">Retiro → Luis María Drago</div>
@@ -67,6 +103,7 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
     <div class="countdown" id="count2"></div>
 </div>
 
+<!-- Ferrosur Roca Puerto Madero -->
 <div class="card">
     <h2>Ferrosur Roca • Puerto Madero</h2>
     <div class="aprox">APROXIMADO</div>
