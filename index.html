@@ -32,20 +32,12 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
 <div class="container">
 
 <!-- NCA Luis María Drago -->
-<div class="card">
+<div class="card" id="ncaCard">
     <h2>NCA • Luis María Drago</h2>
     <div class="aprox">APROXIMADO</div>
-    <div class="time">Horario: 23:50 - 00:56</div>
+    <div class="time" id="ncaTime">Horario: 23:50 - 00:56</div>
     <div class="days">Sábados y domingos</div>
     <div class="countdown" id="count1"></div>
-</div>
-
-<div class="card">
-    <h2>NCA • Luis María Drago</h2>
-    <div class="aprox">APROXIMADO</div>
-    <div class="time">Horario: 02:30 - 03:50</div>
-    <div class="days">Sábados y domingos</div>
-    <div class="countdown" id="count2"></div>
 </div>
 
 <!-- Larga Distancia Rosario Norte -->
@@ -69,49 +61,91 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
 </div>
 
 <script>
-// Función para calcular la próxima fecha de tren con reinicio
-function getNextTrainTime(startHour,startMinute,endHour,endMinute,daysAllowed){
-    const now = new Date();
-    let nextStart = new Date();
-    nextStart.setHours(startHour,startMinute,0,0);
-    let nextEnd = new Date();
-    nextEnd.setHours(endHour,endMinute,0,0);
+// Configuración NCA
+const ncaSchedules = [
+    {startH:23,startM:50,endH:0,endM:56}, // primer NCA
+    {startH:2,startM:30,endH:3,endM:50}   // segundo NCA
+];
+const ncaDays = [6,0]; // sábado=6, domingo=0
 
+function getNextNCA(){
+    const now = new Date();
     const day = now.getDay();
+    if(!ncaDays.includes(day)) return null; // hoy no es sábado/domingo
+
+    // Chequear primer horario
+    let first = new Date();
+    first.setHours(ncaSchedules[0].startH,ncaSchedules[0].startM,0,0);
+    let firstEnd = new Date();
+    firstEnd.setHours(ncaSchedules[0].endH,ncaSchedules[0].endM,0,0);
+    if(now<firstEnd) return {start:first,end:firstEnd,text:`Horario: ${formatTime(ncaSchedules[0])}`};
+
+    // Segundo horario después del primero
+    let second = new Date();
+    second.setHours(ncaSchedules[1].startH,ncaSchedules[1].startM,0,0);
+    let secondEnd = new Date();
+    secondEnd.setHours(ncaSchedules[1].endH,ncaSchedules[1].endM,0,0);
+    if(now<secondEnd) return {start:second,end:secondEnd,text:`Horario: ${formatTime(ncaSchedules[1])}`};
+
+    return null; // ambos pasaron
+}
+
+function formatTime(schedule){
+    return `${String(schedule.startH).padStart(2,'0')}:${String(schedule.startM).padStart(2,'0')} - ${String(schedule.endH).padStart(2,'0')}:${String(schedule.endM).padStart(2,'0')}`;
+}
+
+// Larga distancia y Ferrosur
+function getNextTrainTime(startH,startM,endH,endM,daysAllowed){
+    const now = new Date();
+    const day = now.getDay();
+    let nextStart = new Date();
+    nextStart.setHours(startH,startM,0,0);
+    let nextEnd = new Date();
+    nextEnd.setHours(endH,endM,0,0);
     if(daysAllowed.includes(day) && now<nextEnd){
-        if(now>=nextStart) return nextEnd; // ya comenzó hoy, contar hasta fin
-        return nextStart; // antes de comenzar hoy
+        return nextStart>now?nextStart:nextEnd;
     } else {
-        // buscar siguiente día permitido
         let addDays = 1;
         while(!daysAllowed.includes((day+addDays)%7)) addDays++;
-        nextStart.setDate(now.getDate()+addDays);
-        nextEnd.setDate(now.getDate()+addDays);
+        nextStart.setDate(nextStart.getDate()+addDays);
         return nextStart;
     }
 }
 
-function updateCountdown(id,startH,startM,endH,endM,daysAllowed){
+function updateCountdown(id,startTime){
+    if(!startTime){
+        document.getElementById(id).innerHTML="Próximo tren: N/A";
+        return;
+    }
     const now = new Date();
-    const next = getNextTrainTime(startH,startM,endH,endM,daysAllowed);
-    const diff = next - now;
-
+    const diff = startTime - now;
+    if(diff<0){
+        document.getElementById(id).innerHTML="En curso o pasó";
+        return;
+    }
     const days = Math.floor(diff/(1000*60*60*24));
     const hours = Math.floor((diff/(1000*60*60))%24);
     const minutes = Math.floor((diff/(1000*60))%60);
     const seconds = Math.floor((diff/1000)%60);
-
     document.getElementById(id).innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
 setInterval(()=>{
-    // NCA Luis María Drago
-    updateCountdown("count1",23,50,0,56,[6,0]); // sábado=6, domingo=0
-    updateCountdown("count2",2,30,3,50,[6,0]);
-    // Larga Distancia diario
-    updateCountdown("count3",19,50,20,30,[0,1,2,3,4,5,6]);
-    // Ferrosur Roca solo domingo
-    updateCountdown("count4",18,50,19,10,[0]);
+    // NCA
+    let nextNCA = getNextNCA();
+    const ncaCard = document.getElementById('ncaCard');
+    if(nextNCA){
+        ncaCard.style.display='block';
+        document.getElementById('ncaTime').innerText=nextNCA.text;
+        updateCountdown("count1",nextNCA.start);
+    } else {
+        ncaCard.style.display='none';
+    }
+
+    // Larga distancia
+    updateCountdown("count3",getNextTrainTime(19,50,20,30,[0,1,2,3,4,5,6]));
+    // Ferrosur
+    updateCountdown("count4",getNextTrainTime(18,50,19,10,[0]));
 },1000);
 
 // Buscador
