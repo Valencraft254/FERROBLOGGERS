@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ferrobloggers</title>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body{background:#000;color:white;padding:20px;min-height:100vh;}
@@ -25,7 +24,6 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
 <body>
 
 <h1>🌌 Ferrobloggers</h1>
-
 <div class="search-box">
     <span class="search-icon">🔍</span>
     <input type="text" placeholder="Ferrobloggers" id="searchInput">
@@ -71,40 +69,61 @@ h1{text-align:center;margin-bottom:25px;font-size:40px;letter-spacing:2px;}
 </div>
 
 <script>
-// Próximo sábado o domingo
-function nextWeekendTime(hour, minute){
+// Función para calcular la próxima fecha de tren con reinicio
+function getNextTrainTime(startHour,startMinute,endHour,endMinute,daysAllowed){
     const now = new Date();
-    const day = now.getDay(); // 0 domingo, 6 sábado
-    const validDays = [6,0]; // sábado, domingo
+    let nextStart = new Date();
+    nextStart.setHours(startHour,startMinute,0,0);
+    let nextEnd = new Date();
+    nextEnd.setHours(endHour,endMinute,0,0);
 
-    let next = new Date();
-    next.setSeconds(0); next.setMilliseconds(0);
-    next.setMinutes(minute); next.setHours(hour);
-
-    // Si hoy es sábado o domingo y aún no pasó la hora
-    if(validDays.includes(day) && now < next) return next;
-
-    // Buscar el próximo día válido
-    let daysUntilNext = validDays.map(d => (d - day + 7) % 7).filter(d => d>0);
-    let addDays = Math.min(...daysUntilNext);
-    next.setDate(now.getDate() + addDays);
-
-    return next;
-}
-
-// Próximo domingo
-function nextSundayTime(hour, minute){
-    const now = new Date();
-    let next = new Date();
-    next.setHours(hour,minute,0,0);
     const day = now.getDay();
-    if(day===0 && now < next) return next;
-    next.setDate(now.getDate() + ((7 - day) %7));
-    return next;
+    if(daysAllowed.includes(day) && now<nextEnd){
+        if(now>=nextStart) return nextEnd; // ya comenzó hoy, contar hasta fin
+        return nextStart; // antes de comenzar hoy
+    } else {
+        // buscar siguiente día permitido
+        let addDays = 1;
+        while(!daysAllowed.includes((day+addDays)%7)) addDays++;
+        nextStart.setDate(now.getDate()+addDays);
+        nextEnd.setDate(now.getDate()+addDays);
+        return nextStart;
+    }
 }
 
-// Próximo día
-function nextDailyTime(hour, minute){
+function updateCountdown(id,startH,startM,endH,endM,daysAllowed){
     const now = new Date();
-    let next = new Date();
-    next.set
+    const next = getNextTrainTime(startH,startM,endH,endM,daysAllowed);
+    const diff = next - now;
+
+    const days = Math.floor(diff/(1000*60*60*24));
+    const hours = Math.floor((diff/(1000*60*60))%24);
+    const minutes = Math.floor((diff/(1000*60))%60);
+    const seconds = Math.floor((diff/1000)%60);
+
+    document.getElementById(id).innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+setInterval(()=>{
+    // NCA Luis María Drago
+    updateCountdown("count1",23,50,0,56,[6,0]); // sábado=6, domingo=0
+    updateCountdown("count2",2,30,3,50,[6,0]);
+    // Larga Distancia diario
+    updateCountdown("count3",19,50,20,30,[0,1,2,3,4,5,6]);
+    // Ferrosur Roca solo domingo
+    updateCountdown("count4",18,50,19,10,[0]);
+},1000);
+
+// Buscador
+const searchInput=document.getElementById("searchInput");
+const cards=document.querySelectorAll(".card");
+searchInput.addEventListener("input",function(){
+    const value=this.value.toLowerCase();
+    cards.forEach(card=>{
+        card.style.display=card.innerText.toLowerCase().includes(value)?"block":"none";
+    });
+});
+</script>
+
+</body>
+</html>
