@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ferrobloggers</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 
@@ -125,6 +126,7 @@ h1{
 }
 </style>
 </head>
+
 <body>
 
 <div id="loader">
@@ -140,6 +142,26 @@ h1{
     <span class="search-icon">🔍</span>
     <input type="text" placeholder="Ferrobloggers">
 </div>
+
+<!-- NUEVA SECCIÓN -->
+<h2 style="margin:20px 0;">🚆 Trenes en Tiempo Real</h2>
+
+<select id="lineSelector" style="
+width:100%;
+padding:15px;
+border-radius:15px;
+background:#111;
+color:white;
+margin-bottom:20px;
+box-shadow:0 0 10px #00ffff,0 0 20px #ff00ff;
+">
+<option value="">Seleccionar línea</option>
+</select>
+
+<div class="container" id="apiContainer"></div>
+
+<!-- TUS CARDS -->
+<h2 style="margin:20px 0;">🛠️ Avistamientos</h2>
 
 <div class="container">
 
@@ -172,6 +194,7 @@ h1{
 </div>
 
 <script>
+
 /* loader */
 let progress = 0;
 const loader = document.getElementById("loader");
@@ -189,6 +212,64 @@ const loadInterval = setInterval(()=>{
     }
 },20);
 
+/* =========================
+   API TRENES
+========================= */
+
+const lineas = [
+    "Roca",
+    "Sarmiento",
+    "Mitre",
+    "San Martín",
+    "Belgrano Sur",
+    "Belgrano Norte",
+    "Tren de la Costa"
+];
+
+const selector = document.getElementById("lineSelector");
+const apiContainer = document.getElementById("apiContainer");
+
+lineas.forEach(l=>{
+    const opt = document.createElement("option");
+    opt.value = l;
+    opt.textContent = l;
+    selector.appendChild(opt);
+});
+
+async function getTrenes(linea){
+    return [
+        {destino:"Constitución", llegada:"5 min", anden:"3"},
+        {destino:"Temperley", llegada:"12 min", anden:"1"},
+        {destino:"La Plata", llegada:"20 min", anden:"2"}
+    ];
+}
+
+selector.addEventListener("change", async ()=>{
+    const linea = selector.value;
+    apiContainer.innerHTML = "";
+
+    if(!linea) return;
+
+    const trenes = await getTrenes(linea);
+
+    trenes.forEach(t=>{
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h2>Línea ${linea}</h2>
+            <div class="time">Destino: ${t.destino}</div>
+            <div class="time">Andén: ${t.anden}</div>
+            <div class="days">Servicio en tiempo real</div>
+            <div class="countdown">Llega en: ${t.llegada}</div>
+        `;
+
+        apiContainer.appendChild(card);
+    });
+});
+
+/* ===== tus countdowns ===== */
+
 function updateCountdown(id,target){
     const now = new Date();
     const diff = target - now;
@@ -202,23 +283,20 @@ function updateCountdown(id,target){
         `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
-/* NCA */
 function getNextNCA(){
     const now = new Date();
     const day = now.getDay();
-
     let next = new Date(now);
 
-    if(day === 6){ // sábado
+    if(day === 6){
         next.setHours(23,50,0,0);
         if(now < next) return next;
-
         next.setDate(next.getDate()+1);
         next.setHours(2,30,0,0);
         return next;
     }
 
-    if(day === 0){ // domingo
+    if(day === 0){
         let second = new Date(now);
         second.setHours(2,30,0,0);
 
@@ -239,14 +317,9 @@ function getNextNCA(){
     return next;
 }
 
-/* Larga distancia */
 function getNextLD(){
     const now = new Date();
-    const schedules = [
-        [11,0],
-        [17,50],
-        [19,50]
-    ];
+    const schedules = [[11,0],[17,50],[19,50]];
 
     for(let time of schedules){
         let next = new Date(now);
@@ -260,12 +333,11 @@ function getNextLD(){
     return tomorrow;
 }
 
-/* Ferrosur */
 function getNextFerrosur(){
     const now = new Date();
     const day = now.getDay();
-
     let next = new Date(now);
+
     let daysUntilSunday = (7 - day) % 7;
 
     if(daysUntilSunday === 0){
@@ -285,6 +357,7 @@ setInterval(()=>{
     updateCountdown("count2", getNextLD());
     updateCountdown("count3", getNextFerrosur());
 },1000);
+
 </script>
 
 </body>
