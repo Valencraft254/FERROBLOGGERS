@@ -3,287 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ferrobloggers</title>
+<title>Ferrobloggers PRO</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
     background:#000;
-    color:white;
+    color:#fff;
     padding:20px;
-    min-height:100vh;
 }
 
 h1{
     text-align:center;
-    margin-bottom:25px;
     font-size:40px;
+    margin-bottom:20px;
     text-shadow:0 0 10px #00ffff,0 0 20px #ff00ff;
 }
 
-.search-box{
-    position:relative;
-    max-width:600px;
-    margin:0 auto 30px auto;
-}
-
-.search-box input{
-    width:100%;
-    padding:15px 20px 15px 50px;
-    border:none;
-    border-radius:15px;
-    background:#111;
-    color:white;
-    font-size:18px;
-    outline:none;
-    box-shadow:0 0 10px #00ffff,0 0 20px #ff00ff;
-}
-
-.search-icon{
-    position:absolute;
-    left:18px;
-    top:50%;
-    transform:translateY(-50%);
-    color:gray;
+.section-title{
+    margin:30px 0 15px;
+    font-size:26px;
+    text-shadow:0 0 10px cyan;
 }
 
 .container{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:25px;
+    gap:20px;
 }
 
 .card{
     background:#0b0b0b;
-    padding:25px;
+    padding:20px;
     border-radius:20px;
     box-shadow:0 0 20px rgba(0,255,255,.4),0 0 30px rgba(255,0,255,.3);
 }
 
-.card h2{
-    margin-bottom:10px;
-    font-size:24px;
-}
+.aprox{color:red;font-weight:bold;}
+.time{margin:6px 0;color:#ccc;}
+.countdown{margin-top:10px;font-size:20px;font-weight:bold;}
 
-.aprox{
-    color:red;
+.status{
+    margin-top:8px;
     font-weight:bold;
-    margin-bottom:10px;
 }
 
-.time{
-    margin:10px 0;
+.platform{
+    color:#00ffff;
 }
 
-.days{
-    color:#aaa;
+table{
+    width:100%;
+    margin-top:10px;
+    border-collapse:collapse;
 }
 
-.countdown{
-    font-size:22px;
-    font-weight:bold;
-    margin-top:15px;
+th,td{
+    border:1px solid #333;
+    padding:6px;
 }
 
-/* loader */
-#loader{
-    position:fixed;
-    inset:0;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:9999;
-}
+th{background:#111;}
 
-#loader-bar{
-    width:300px;
-    height:20px;
-    background:#111;
-    border-radius:15px;
-    overflow:hidden;
-    margin-bottom:10px;
-}
-
-#loader-progress{
-    width:0%;
-    height:100%;
-    background:linear-gradient(-45deg,#ff00ff,#00ffff,#ff00ff,#00ffff);
-    background-size:400% 400%;
-    animation:galaxy 2s linear infinite;
-}
-
-#loader-percentage{
-    font-size:16px;
-}
-
-@keyframes galaxy{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
 </style>
 </head>
-<body>
 
-<div id="loader">
-    <div id="loader-bar">
-        <div id="loader-progress"></div>
-    </div>
-    <div id="loader-percentage">0%</div>
-</div>
+<body>
 
 <h1>🌌 Ferrobloggers</h1>
 
-<div class="search-box">
-    <span class="search-icon">🔍</span>
-    <input type="text" placeholder="Ferrobloggers">
-</div>
-
+<!-- APROXIMADO -->
+<div class="section-title">🚨 APROXIMADO</div>
 <div class="container">
 
 <div class="card">
-    <h2>NCA • Luis María Drago</h2>
-    <div class="aprox">APROXIMADO</div>
-    <div class="time">Horario: 23:50 - 00:56 / 02:30 - 03:50</div>
-    <div class="days">Sábados y domingos</div>
-    <div class="countdown" id="count1"></div>
+<h2>NCA • Drago</h2>
+<div class="aprox">APROXIMADO</div>
+<div class="time">23:50 / 02:30</div>
+<div class="platform">Andén: Carga</div>
+<div class="countdown" id="nca"></div>
+<div class="status" id="nca_status"></div>
+</div>
+
+</div>
+
+<!-- LINEAS -->
+<div class="section-title">🚆 LINEAS OFICIALES</div>
+<div class="container">
+
+<div class="card">
+<h2>Línea Roca • La Plata → Constitución</h2>
+<div class="platform">Andén: 4</div>
+
+<table>
+<tr><th>Estación</th><th>Hora</th></tr>
+<tr><td>La Plata</td><td>05:30</td></tr>
+<tr><td>Quilmes</td><td>06:10</td></tr>
+<tr><td>Constitución</td><td>06:50</td></tr>
+</table>
+
+<div class="countdown" id="roca"></div>
+<div class="status" id="roca_status"></div>
 </div>
 
 <div class="card">
-    <h2>Larga Distancia • Luis María Drago</h2>
-    <div class="aprox">APROXIMADO</div>
-    <div class="time">Horario: 11:00 - 12:10</div>
-    <div class="time">Horario: 17:50 - 18:55</div>
-    <div class="time">Horario: 19:50 - 20:30</div>
-    <div class="days">Todos los días</div>
-    <div class="countdown" id="count2"></div>
+<h2>Línea Sarmiento • Moreno → Once</h2>
+<div class="platform">Andén: 2</div>
+
+<table>
+<tr><th>Estación</th><th>Hora</th></tr>
+<tr><td>Moreno</td><td>06:00</td></tr>
+<tr><td>Merlo</td><td>06:20</td></tr>
+<tr><td>Once</td><td>07:00</td></tr>
+</table>
+
+<div class="countdown" id="sarmiento"></div>
+<div class="status" id="sarmiento_status"></div>
 </div>
 
 <div class="card">
-    <h2>Ferrosur Roca • Puerto Madero</h2>
-    <div class="aprox">APROXIMADO</div>
-    <div class="time">Horario: 18:50 - 19:10</div>
-    <div class="days">Domingos</div>
-    <div class="countdown" id="count3"></div>
+<h2>Línea Mitre • Tigre → Retiro</h2>
+<div class="platform">Andén: 1</div>
+
+<table>
+<tr><th>Estación</th><th>Hora</th></tr>
+<tr><td>Tigre</td><td>06:10</td></tr>
+<tr><td>Olivos</td><td>06:40</td></tr>
+<tr><td>Retiro</td><td>07:10</td></tr>
+</table>
+
+<div class="countdown" id="mitre"></div>
+<div class="status" id="mitre_status"></div>
 </div>
 
 </div>
 
 <script>
-/* loader */
-let progress = 0;
-const loader = document.getElementById("loader");
-const loaderProgress = document.getElementById("loader-progress");
-const loaderPercentage = document.getElementById("loader-percentage");
-
-const loadInterval = setInterval(()=>{
-    progress++;
-    loaderProgress.style.width = progress + "%";
-    loaderPercentage.innerText = progress + "%";
-
-    if(progress >= 100){
-        clearInterval(loadInterval);
-        loader.style.display = "none";
-    }
-},20);
-
-function updateCountdown(id,target){
+function getNext(schedule){
     const now = new Date();
-    const diff = target - now;
 
-    const days = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff / (1000*60*60)) % 24);
-    const minutes = Math.floor((diff / (1000*60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    for(let t of schedule){
+        let target = new Date();
+        target.setHours(t[0], t[1], 0, 0);
 
-    document.getElementById(id).innerText =
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
-}
-
-/* NCA */
-function getNextNCA(){
-    const now = new Date();
-    const day = now.getDay();
-
-    let next = new Date(now);
-
-    if(day === 6){ // sábado
-        next.setHours(23,50,0,0);
-        if(now < next) return next;
-
-        next.setDate(next.getDate()+1);
-        next.setHours(2,30,0,0);
-        return next;
+        if(now < target){
+            return target;
+        }
     }
 
-    if(day === 0){ // domingo
-        let second = new Date(now);
-        second.setHours(2,30,0,0);
-
-        let first = new Date(now);
-        first.setHours(23,50,0,0);
-
-        if(now < second) return second;
-        if(now < first) return first;
-
-        next.setDate(next.getDate()+6);
-        next.setHours(23,50,0,0);
-        return next;
-    }
-
-    let daysUntilSaturday = (6 - day + 7) % 7;
-    next.setDate(next.getDate()+daysUntilSaturday);
-    next.setHours(23,50,0,0);
-    return next;
-}
-
-/* Larga distancia */
-function getNextLD(){
-    const now = new Date();
-    const schedules = [
-        [11,0],
-        [17,50],
-        [19,50]
-    ];
-
-    for(let time of schedules){
-        let next = new Date(now);
-        next.setHours(time[0],time[1],0,0);
-        if(now < next) return next;
-    }
-
-    let tomorrow = new Date(now);
+    let tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
-    tomorrow.setHours(11,0,0,0);
+    tomorrow.setHours(schedule[0][0], schedule[0][1], 0, 0);
+
     return tomorrow;
 }
 
-/* Ferrosur */
-function getNextFerrosur(){
+function updateLine(id, statusId, schedule){
     const now = new Date();
-    const day = now.getDay();
+    const target = getNext(schedule);
+    const diff = target - now;
 
-    let next = new Date(now);
-    let daysUntilSunday = (7 - day) % 7;
+    const m = Math.floor((diff / (1000*60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    const h = Math.floor(diff / (1000*60*60));
 
-    if(daysUntilSunday === 0){
-        next.setHours(18,50,0,0);
-        if(now < next) return next;
-        daysUntilSunday = 7;
-    }
+    document.getElementById(id).innerText =
+        `${h}h ${m}m ${s}s`;
 
-    next.setDate(now.getDate()+daysUntilSunday);
-    next.setHours(18,50,0,0);
+    // estados tipo tren real
+    let status = "EN CAMINO";
 
-    return next;
+    if(diff <= 120000) status = "EN ANDÉN";
+    if(diff <= 30000) status = "SALIENDO";
+
+    document.getElementById(statusId).innerText = status;
 }
 
 setInterval(()=>{
-    updateCountdown("count1", getNextNCA());
-    updateCountdown("count2", getNextLD());
-    updateCountdown("count3", getNextFerrosur());
+
+    // APROX
+    updateLine("nca","nca_status",[
+        [23,50],
+        [2,30]
+    ]);
+
+    // ROCA
+    updateLine("roca","roca_status",[
+        [5,30],
+        [6,30],
+        [7,30]
+    ]);
+
+    // SARMIENTO
+    updateLine("sarmiento","sarmiento_status",[
+        [6,0],
+        [6,30],
+        [7,0]
+    ]);
+
+    // MITRE
+    updateLine("mitre","mitre_status",[
+        [6,10],
+        [6,40],
+        [7,10]
+    ]);
+
 },1000);
 </script>
 
