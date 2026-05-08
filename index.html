@@ -15,6 +15,61 @@ body{
     min-height:100vh;
 }
 
+/* Header con botones */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    padding:20px;
+    background:#0b0b0b;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,255,255,.4);
+}
+
+.header h1{
+    font-size:32px;
+    text-shadow:0 0 10px #00ffff,0 0 20px #ff00ff;
+    margin:0;
+}
+
+.auth-buttons{
+    display:flex;
+    gap:15px;
+}
+
+.btn-auth{
+    padding:12px 30px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:all 0.3s ease;
+}
+
+.btn-login{
+    background:#00ffff;
+    color:#000;
+    box-shadow:0 0 10px #00ffff;
+}
+
+.btn-login:hover{
+    box-shadow:0 0 20px #00ffff,0 0 10px #ff00ff;
+    transform:scale(1.05);
+}
+
+.btn-register{
+    background:#ff00ff;
+    color:#fff;
+    box-shadow:0 0 10px #ff00ff;
+}
+
+.btn-register:hover{
+    box-shadow:0 0 20px #ff00ff,0 0 10px #00ffff;
+    transform:scale(1.05);
+}
+
 h1{
     text-align:center;
     margin-bottom:25px;
@@ -153,6 +208,11 @@ h1{
 }
 
 @media (max-width:768px){
+    .header{
+        flex-direction:column;
+        gap:15px;
+    }
+
     .youtube-button{
         bottom:20px;
         right:20px;
@@ -178,7 +238,14 @@ h1{
     <div id="loader-percentage">0%</div>
 </div>
 
-<h1>🌌 Ferrobloggers</h1>
+<!-- Header con botones de Login y Register -->
+<div class="header">
+    <h1>🌌 Ferrobloggers</h1>
+    <div class="auth-buttons">
+        <button class="btn-auth btn-login" onclick="abrirLogin()">🔐 Login</button>
+        <button class="btn-auth btn-register" onclick="abrirRegister()">📝 Register</button>
+    </div>
+</div>
 
 <div class="search-box">
     <span class="search-icon">🔍</span>
@@ -331,6 +398,15 @@ setInterval(()=>{
     updateCountdown("count2", getNextLD());
     updateCountdown("count3", getNextFerrosur());
 },1000);
+
+/* Funciones de Login y Register */
+function abrirLogin(){
+    alert("🔐 Login - Función en desarrollo");
+}
+
+function abrirRegister(){
+    alert("📝 Register - Función en desarrollo");
+}
 </script>
 
 </body>
